@@ -7,11 +7,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "prez": ["./node_modules/prez/src/index.ts"]
-    }
+    "noEmit": true
   },
-  "include": ["src", "node_modules/prez/src"]
+  "include": ["src"]
 }
