@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp") version "1.9.22-1.0.17"
 }
 
 val localProperties = Properties()
@@ -35,13 +36,16 @@ android {
         buildConfigField("String", "ZAI_API_KEY", "\"${localProperties.getProperty("ZAI_API_KEY", "")}\"")
         buildConfigField("String", "ZAI_BASE_URL", "\"https://api.z.ai/api/paas/v4\"")
         buildConfigField("String", "ZAI_MODEL", "\"glm-4.7-flash\"")
+        buildConfigField("String", "SENTRY_DSN", "\"${localProperties.getProperty("SENTRY_DSN", "")}\"")
+        buildConfigField("String", "BACKEND_URL", "\"${localProperties.getProperty("BACKEND_URL", "https://nudge-api.fly.dev")}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -49,7 +53,6 @@ android {
             signingConfig = signingConfigs.getByName("release")
             isJniDebuggable = false
             isDebuggable = false
-            isShrinkResources = false
         }
     }
 
@@ -104,6 +107,14 @@ dependencies {
 
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.google.code.gson:gson:2.9.0")
+    implementation("io.sentry:sentry-android:7.3.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")

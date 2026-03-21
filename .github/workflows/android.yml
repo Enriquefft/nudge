@@ -1,0 +1,56 @@
+name: Android CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'app/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Make gradlew executable
+        working-directory: app/Soporte Desarrollo
+        run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        working-directory: app/Soporte Desarrollo
+        run: |
+          echo "ZAI_API_KEY=${{ secrets.ZAI_API_KEY }}" >> local.properties
+          echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> local.properties
+          echo "BACKEND_URL=${{ secrets.BACKEND_URL }}" >> local.properties
+          echo "RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}" >> local.properties
+          echo "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}" >> local.properties
+
+      - name: Build debug APKs (all flavors)
+        working-directory: app/Soporte Desarrollo
+        run: ./gradlew assembleDebug
+
+      - name: Build release APKs (all flavors)
+        if: github.event_name == 'push'
+        working-directory: app/Soporte Desarrollo
+        run: ./gradlew assembleRelease
+
+      - name: Upload APKs
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: apks
+          path: |
+            app/Soporte Desarrollo/app/build/outputs/apk/clover/release/*.apk
+            app/Soporte Desarrollo/app/build/outputs/apk/pilot/release/*.apk
+            app/Soporte Desarrollo/app/build/outputs/apk/demo/release/*.apk

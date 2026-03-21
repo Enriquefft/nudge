@@ -7,3 +7,22 @@ hs_err_pid*.log
 *.jks
 node_modules/
 .vercel/
+
+# Build outputs
+*.apk
+*.aab
+
+# Android
+local.properties
+**/local.properties
+
+# Go
+backend/nudge-api
+
+# IDE
+*.iml
+
+# OS
+.DS_Store
+
+# Env

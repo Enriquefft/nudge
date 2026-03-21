@@ -1,137 +1,176 @@
 package com.aleph.nudge.data
 
-import android.content.Context
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.util.concurrent.ConcurrentHashMap
+import com.aleph.nudge.data.db.NudgeDatabase
+import com.aleph.nudge.data.db.UpsellPairEntity
+import com.aleph.nudge.service.EventSyncManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
-class UpsellHistoryManager(context: Context) {
+class UpsellHistoryManager(private val db: NudgeDatabase) {
 
     companion object {
         private const val TAG = "Nudge"
-        private const val PREFS_NAME = "nudge_upsell_history"
-        private const val KEY_HISTORY = "pair_history"
         private const val MAX_PAIRS = 200
     }
 
-    private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-    private val gson = Gson()
+    private val upsellPairDao = db.upsellPairDao()
 
-    // In-memory cache: "triggerItem\u001FsuggestedItem" -> PairStats
-    // Key format changed (lowercase + \u001F delimiter); old SharedPreferences data is not migrated.
-    private val history: ConcurrentHashMap<String, PairStats> = loadHistory()
+    /** Set by NudgeApplication to enable analytics event logging. */
+    var eventSyncManager: EventSyncManager? = null
 
-    data class PairStats(
-        var accepted: Int = 0,
-        var dismissed: Int = 0
-    ) {
-        val total: Int get() = accepted + dismissed
-        val acceptRate: Float get() = if (total == 0) 0f else accepted.toFloat() / total
-    }
-
-    fun recordAccepted(triggerItems: List<String>, suggestedItemName: String) {
+    suspend fun recordAccepted(triggerItems: List<String>, suggestedItemName: String) = withContext(Dispatchers.IO) {
         for (trigger in triggerItems) {
             val key = pairKey(trigger, suggestedItemName)
-            val stats = history.getOrPut(key) { PairStats() }
-            stats.accepted++
+            val existing = upsellPairDao.getByKey(key)
+            if (existing != null) {
+                upsellPairDao.upsert(
+                    existing.copy(
+                        accepted = existing.accepted + 1,
+                        lastUpdated = System.currentTimeMillis()
+                    )
+                )
+            } else {
+                upsellPairDao.upsert(
+                    UpsellPairEntity(
+                        pairKey = key,
+                        triggerItem = trigger.trim().lowercase(),
+                        suggestedItem = suggestedItemName.trim().lowercase(),
+                        accepted = 1,
+                        lastUpdated = System.currentTimeMillis()
+                    )
+                )
+            }
         }
-        persist()
+        evictIfNeeded()
         Log.d(TAG, "UpsellHistory: recorded ACCEPT for '$suggestedItemName' (triggers: $triggerItems)")
+
+        // Fire-and-forget analytics event (don't block the accept action)
+        eventSyncManager?.let { manager ->
+            CoroutineScope(Dispatchers.IO).launch {
+                manager.logEvent("accepted", triggerItems, suggestedItemName)
+            }
+        }
     }
 
-    fun recordDismissed(triggerItems: List<String>, suggestedItemName: String) {
+    suspend fun recordDismissed(triggerItems: List<String>, suggestedItemName: String) = withContext(Dispatchers.IO) {
         for (trigger in triggerItems) {
             val key = pairKey(trigger, suggestedItemName)
-            val stats = history.getOrPut(key) { PairStats() }
-            stats.dismissed++
+            val existing = upsellPairDao.getByKey(key)
+            if (existing != null) {
+                upsellPairDao.upsert(
+                    existing.copy(
+                        dismissed = existing.dismissed + 1,
+                        lastUpdated = System.currentTimeMillis()
+                    )
+                )
+            } else {
+                upsellPairDao.upsert(
+                    UpsellPairEntity(
+                        pairKey = key,
+                        triggerItem = trigger.trim().lowercase(),
+                        suggestedItem = suggestedItemName.trim().lowercase(),
+                        dismissed = 1,
+                        lastUpdated = System.currentTimeMillis()
+                    )
+                )
+            }
         }
-        persist()
+        evictIfNeeded()
         Log.d(TAG, "UpsellHistory: recorded DISMISS for '$suggestedItemName' (triggers: $triggerItems)")
+
+        // Fire-and-forget analytics event (don't block the dismiss action)
+        eventSyncManager?.let { manager ->
+            CoroutineScope(Dispatchers.IO).launch {
+                manager.logEvent("dismissed", triggerItems, suggestedItemName)
+            }
+        }
     }
 
     /**
      * Build a prompt-friendly summary of upsell history relevant to the current order items.
      * Returns null if there's no relevant history.
      */
-    fun getHistorySummary(currentItems: List<String>): String? {
-        val relevantPairs = mutableListOf<Triple<String, String, PairStats>>()
+    suspend fun getHistorySummary(currentItems: List<String>): String? = withContext(Dispatchers.IO) {
         val currentItemNames = currentItems.map { it.trim().lowercase() }.toSet()
+        val allPairs = upsellPairDao.getAll()
 
-        for ((key, stats) in history) {
-            if (stats.total < 2) continue // need at least 2 data points
-            val parts = key.split("\u001F", limit = 2)
-            if (parts.size == 2 && parts[0] in currentItemNames) {
-                relevantPairs.add(Triple(parts[0], parts[1], stats))
-            }
+        val relevantPairs = allPairs.filter { pair ->
+            val total = pair.accepted + pair.dismissed
+            total >= 2 && pair.triggerItem in currentItemNames
         }
 
-        if (relevantPairs.isEmpty()) return null
+        if (relevantPairs.isEmpty()) return@withContext null
 
-        // Sort by total interactions descending
-        relevantPairs.sortByDescending { it.third.total }
+        val sorted = relevantPairs.sortedByDescending { it.accepted + it.dismissed }
 
-        val lines = relevantPairs.take(10).map { (trigger, suggested, stats) ->
-            val rate = "%.0f".format(stats.acceptRate * 100)
-            "- When '$trigger' is ordered, suggesting '$suggested': $rate% accepted (${stats.accepted}/${stats.total})"
+        val lines = sorted.take(10).map { pair ->
+            val total = pair.accepted + pair.dismissed
+            val rate = if (total == 0) 0f else pair.accepted.toFloat() / total * 100f
+            "- When '${pair.triggerItem}' is ordered, suggesting '${pair.suggestedItem}': ${"%.0f".format(rate)}% accepted (${pair.accepted}/$total)"
         }
 
-        return "Historical upsell performance for items in this order:\n${lines.joinToString("\n")}"
+        "Historical upsell performance for items in this order:\n${lines.joinToString("\n")}"
     }
 
-    /** Returns true if demo history has already been seeded. */
-    fun hasDemoHistory(): Boolean = history.isNotEmpty()
+    /**
+     * Returns true if demo history has already been seeded.
+     * Uses runBlocking because it is called from Application.onCreate().
+     */
+    fun hasDemoHistory(): Boolean = runBlocking(Dispatchers.IO) {
+        upsellPairDao.count() > 0
+    }
 
-    /** Pre-seeds realistic upsell pair data for a coffee-shop demo. */
-    fun seedDemoHistory() {
+    /**
+     * Pre-seeds realistic upsell pair data for a coffee-shop demo.
+     * Uses runBlocking because it is called from Application.onCreate().
+     */
+    fun seedDemoHistory() = runBlocking(Dispatchers.IO) {
         val pairs = listOf(
             // High acceptance
-            Triple("latte", "croissant", PairStats(accepted = 12, dismissed = 3)),
-            Triple("cappuccino", "oat milk", PairStats(accepted = 8, dismissed = 2)),
-            Triple("americano", "extra shot", PairStats(accepted = 6, dismissed = 2)),
-            Triple("iced coffee", "large size upgrade", PairStats(accepted = 5, dismissed = 2)),
-            Triple("mocha", "whipped cream", PairStats(accepted = 7, dismissed = 2)),
-            Triple("matcha latte", "vanilla syrup", PairStats(accepted = 4, dismissed = 1)),
+            Triple("latte", "croissant", PairData(accepted = 12, dismissed = 3)),
+            Triple("cappuccino", "oat milk", PairData(accepted = 8, dismissed = 2)),
+            Triple("americano", "extra shot", PairData(accepted = 6, dismissed = 2)),
+            Triple("iced coffee", "large size upgrade", PairData(accepted = 5, dismissed = 2)),
+            Triple("mocha", "whipped cream", PairData(accepted = 7, dismissed = 2)),
+            Triple("matcha latte", "vanilla syrup", PairData(accepted = 4, dismissed = 1)),
             // Medium acceptance
-            Triple("latte", "blueberry muffin", PairStats(accepted = 3, dismissed = 3)),
-            Triple("hot chocolate", "croissant", PairStats(accepted = 3, dismissed = 2)),
+            Triple("latte", "blueberry muffin", PairData(accepted = 3, dismissed = 3)),
+            Triple("hot chocolate", "croissant", PairData(accepted = 3, dismissed = 2)),
             // Low acceptance
-            Triple("avocado toast", "breakfast sandwich", PairStats(accepted = 1, dismissed = 5)),
-            Triple("espresso", "yogurt parfait", PairStats(accepted = 0, dismissed = 4)),
+            Triple("avocado toast", "breakfast sandwich", PairData(accepted = 1, dismissed = 5)),
+            Triple("espresso", "yogurt parfait", PairData(accepted = 0, dismissed = 4)),
         )
 
-        for ((trigger, suggested, stats) in pairs) {
-            history["$trigger\u001F$suggested"] = stats
+        for ((trigger, suggested, data) in pairs) {
+            val key = "$trigger\u001F$suggested"
+            upsellPairDao.upsert(
+                UpsellPairEntity(
+                    pairKey = key,
+                    triggerItem = trigger,
+                    suggestedItem = suggested,
+                    accepted = data.accepted,
+                    dismissed = data.dismissed,
+                    lastUpdated = System.currentTimeMillis()
+                )
+            )
         }
-        persist()
         Log.d(TAG, "UpsellHistory: seeded ${pairs.size} demo pairs")
     }
 
     private fun pairKey(triggerItem: String, suggestedItem: String): String =
         "${triggerItem.trim().lowercase()}\u001F${suggestedItem.trim().lowercase()}"
 
-    private fun loadHistory(): ConcurrentHashMap<String, PairStats> {
-        val json = prefs.getString(KEY_HISTORY, null) ?: return ConcurrentHashMap()
-        return try {
-            val type = object : TypeToken<MutableMap<String, PairStats>>() {}.type
-            val loaded: MutableMap<String, PairStats>? = gson.fromJson(json, type)
-            if (loaded != null) ConcurrentHashMap(loaded) else ConcurrentHashMap()
-        } catch (e: Exception) {
-            Log.w(TAG, "UpsellHistory: failed to load history, starting fresh", e)
-            ConcurrentHashMap()
+    private fun evictIfNeeded() {
+        val count = upsellPairDao.count()
+        if (count > MAX_PAIRS) {
+            upsellPairDao.deleteOldest(count - MAX_PAIRS)
         }
     }
 
-    private fun persist() {
-        // Evict least-used pairs if over limit (snapshot-then-retain for ConcurrentHashMap safety)
-        if (history.size > MAX_PAIRS) {
-            val keysToKeep = history.entries
-                .sortedByDescending { it.value.total }
-                .take(MAX_PAIRS)
-                .map { it.key }
-                .toSet()
-            history.keys.retainAll(keysToKeep)
-        }
-        prefs.edit().putString(KEY_HISTORY, gson.toJson(history)).apply()
-    }
+    /** Simple holder for demo seed data. */
+    private data class PairData(val accepted: Int, val dismissed: Int)
 }

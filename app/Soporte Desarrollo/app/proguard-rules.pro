@@ -12,10 +12,37 @@
 #   public *;
 #}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Preserve line numbers in stack traces for crash reporting
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# ---------------------------------------------------------------------------
+# Clover SDK — uses reflection heavily; keep all public/protected members
+# ---------------------------------------------------------------------------
+-keep class com.clover.sdk.** { *; }
+
+# ---------------------------------------------------------------------------
+# Gson — keep model classes that are serialized/deserialized
+# ---------------------------------------------------------------------------
+-keep class com.aleph.nudge.model.** { *; }
+
+# ---------------------------------------------------------------------------
+# OkHttp
+# ---------------------------------------------------------------------------
+-dontwarn okhttp3.**
+-keep class okhttp3.** { *; }
+
+# ---------------------------------------------------------------------------
+# BuildConfig
+# ---------------------------------------------------------------------------
+-keep class com.aleph.nudge.BuildConfig { *; }
+
+# ---------------------------------------------------------------------------
+# UpsellHistoryManager inner class (accessed reflectively via Gson)
+# ---------------------------------------------------------------------------
+-keep class com.aleph.nudge.data.UpsellHistoryManager$PairStats { *; }
+
+# ---------------------------------------------------------------------------
+# Sentry crash reporting
+# ---------------------------------------------------------------------------
+-keep class io.sentry.** { *; }

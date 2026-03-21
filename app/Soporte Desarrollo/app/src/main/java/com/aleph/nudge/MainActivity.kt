@@ -5,8 +5,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -31,6 +29,14 @@ import com.clover.sdk.util.CloverAccount
 import com.clover.sdk.v3.order.Order
 import com.clover.sdk.v3.order.OrderConnector
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Suppress("DEPRECATION")
 class MainActivity : android.app.Activity() {
@@ -60,12 +66,11 @@ class MainActivity : android.app.Activity() {
     private lateinit var aiService: AiService
     private lateinit var statsManager: StatsManager
     private lateinit var upsellHistoryManager: UpsellHistoryManager
-    private val mainHandler = Handler(Looper.getMainLooper())
+    private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var orderObserver: OrderObserver? = null
     private var currentOrderId: String? = null
     private var pulseAnimator: ObjectAnimator? = null
-    private var suggestionDebounceRunnable: Runnable? = null
-    private var isActivityDestroyed = false
+    private var suggestionJob: Job? = null
 
     // Demo mode state
     private var scenarioIndex = 0
@@ -168,24 +173,26 @@ class MainActivity : android.app.Activity() {
         btnAddItem?.isEnabled = false
         progressLoading.visibility = View.VISIBLE
 
-        val historySummary = upsellHistoryManager.getHistorySummary(scenario.currentOrderItems)
-        val customerContext = DemoDataProvider.getDemoCustomerContext(currentScenarioIndex)
-
         val currentOrderItemNames = scenario.currentOrderItems
         updateOrderItemsDisplay(orderItems)
         updateDemoButtonText()
-        aiService.getSuggestion(
-            currentOrderItemNames,
-            upsellHistory = historySummary,
-            customerContext = customerContext
-        ) { suggestion ->
-            if (isActivityDestroyed) return@getSuggestion
+
+        activityScope.launch {
+            val historySummary = upsellHistoryManager.getHistorySummary(scenario.currentOrderItems)
+            val customerContext = DemoDataProvider.getDemoCustomerContext(currentScenarioIndex)
+
+            val suggestion = aiService.getSuggestion(
+                currentOrderItemNames,
+                upsellHistory = historySummary,
+                customerContext = customerContext
+            )
+
             progressLoading.visibility = View.GONE
             val finalSuggestion = suggestion
                 ?: scenarios[currentScenarioIndex].fallbackSuggestion
                 ?: run {
                     btnAddItem?.isEnabled = true
-                    return@getSuggestion
+                    return@launch
                 }
             // Check if suggested item is already in the current order
             val isAlreadyInOrder = currentOrderItemNames.any {
@@ -194,7 +201,7 @@ class MainActivity : android.app.Activity() {
             if (isAlreadyInOrder) {
                 Log.d(TAG, "Skipping suggestion - ${finalSuggestion.itemName} already in order")
                 btnAddItem?.isEnabled = true
-                return@getSuggestion
+                return@launch
             }
             statsManager.recordShown()
             showDemoSuggestionCard(finalSuggestion, currentOrderItemNames)
@@ -207,22 +214,26 @@ class MainActivity : android.app.Activity() {
 
         val card = SuggestionCardView(this)
         card.setOnAddClickListener { onResult ->
-            statsManager.recordAccepted(suggestion.price)
-            upsellHistoryManager.recordAccepted(triggerItems, suggestion.itemName)
-            // Add accepted suggestion to the visible order + total
-            orderItems.add(suggestion.itemName to suggestion.price)
-            updateOrderItemsDisplay(orderItems)
-            Log.d(TAG, "MainActivity: suggestion accepted: ${suggestion.itemName}")
-            updateStatsSummary()
-            btnAddItem?.isEnabled = true
-            onResult(true)
+            activityScope.launch {
+                statsManager.recordAccepted(suggestion.price)
+                upsellHistoryManager.recordAccepted(triggerItems, suggestion.itemName)
+                // Add accepted suggestion to the visible order + total
+                orderItems.add(suggestion.itemName to suggestion.price)
+                updateOrderItemsDisplay(orderItems)
+                Log.d(TAG, "MainActivity: suggestion accepted: ${suggestion.itemName}")
+                updateStatsSummary()
+                btnAddItem?.isEnabled = true
+                onResult(true)
+            }
         }
         card.setOnDismissClickListener {
-            statsManager.recordDismissed()
-            upsellHistoryManager.recordDismissed(triggerItems, suggestion.itemName)
-            card.dismiss()
-            updateStatsSummary()
-            btnAddItem?.isEnabled = true
+            activityScope.launch {
+                statsManager.recordDismissed()
+                upsellHistoryManager.recordDismissed(triggerItems, suggestion.itemName)
+                card.dismiss()
+                updateStatsSummary()
+                btnAddItem?.isEnabled = true
+            }
         }
 
         suggestionContainer.addView(card)
@@ -332,19 +343,21 @@ class MainActivity : android.app.Activity() {
         setMenuBarEnabled(false)
 
         val currentOrderItemNames = orderItems.map { it.first }
-        val historySummary = upsellHistoryManager.getHistorySummary(currentOrderItemNames)
 
-        aiService.getSuggestion(
-            currentOrderItemNames,
-            upsellHistory = historySummary
-        ) { suggestion ->
-            if (isActivityDestroyed) return@getSuggestion
+        activityScope.launch {
+            val historySummary = upsellHistoryManager.getHistorySummary(currentOrderItemNames)
+
+            val suggestion = aiService.getSuggestion(
+                currentOrderItemNames,
+                upsellHistory = historySummary
+            )
+
             progressLoading.visibility = View.GONE
             setMenuBarEnabled(true)
 
             if (suggestion == null) {
                 Log.d(TAG, "MainActivity: pilot AI returned no suggestion")
-                return@getSuggestion
+                return@launch
             }
 
             // Check if suggested item is already in the current order
@@ -353,7 +366,7 @@ class MainActivity : android.app.Activity() {
             }
             if (isAlreadyInOrder) {
                 Log.d(TAG, "Skipping suggestion - ${suggestion.itemName} already in order")
-                return@getSuggestion
+                return@launch
             }
 
             statsManager.recordShown()
@@ -375,19 +388,23 @@ class MainActivity : android.app.Activity() {
 
         val card = SuggestionCardView(this)
         card.setOnAddClickListener { onResult ->
-            statsManager.recordAccepted(suggestion.price)
-            upsellHistoryManager.recordAccepted(triggerItems, suggestion.itemName)
-            orderItems.add(suggestion.itemName to suggestion.price)
-            updateOrderItemsDisplay(orderItems)
-            Log.d(TAG, "MainActivity: pilot suggestion accepted: ${suggestion.itemName}")
-            updateStatsSummary()
-            onResult(true)
+            activityScope.launch {
+                statsManager.recordAccepted(suggestion.price)
+                upsellHistoryManager.recordAccepted(triggerItems, suggestion.itemName)
+                orderItems.add(suggestion.itemName to suggestion.price)
+                updateOrderItemsDisplay(orderItems)
+                Log.d(TAG, "MainActivity: pilot suggestion accepted: ${suggestion.itemName}")
+                updateStatsSummary()
+                onResult(true)
+            }
         }
         card.setOnDismissClickListener {
-            statsManager.recordDismissed()
-            upsellHistoryManager.recordDismissed(triggerItems, suggestion.itemName)
-            card.dismiss()
-            updateStatsSummary()
+            activityScope.launch {
+                statsManager.recordDismissed()
+                upsellHistoryManager.recordDismissed(triggerItems, suggestion.itemName)
+                card.dismiss()
+                updateStatsSummary()
+            }
         }
 
         suggestionContainer.addView(card)
@@ -403,13 +420,13 @@ class MainActivity : android.app.Activity() {
     private fun loadInventory() {
         btnRetry?.visibility = View.GONE
         tvStatus.text = getString(R.string.loading_menu)
-        inventoryService?.loadInventory { items ->
-            if (isActivityDestroyed) return@loadInventory
+        activityScope.launch {
+            val items = inventoryService?.loadInventory() ?: emptyList()
             if (items.isEmpty()) {
                 tvStatus.text = getString(R.string.error_load_menu)
                 btnRetry?.visibility = View.VISIBLE
                 Log.w(TAG, "MainActivity: inventory loaded 0 items")
-                return@loadInventory
+                return@launch
             }
             aiService.setMenuContext(items)
             tvStatus.text = getString(R.string.ready_message)
@@ -432,43 +449,50 @@ class MainActivity : android.app.Activity() {
     }
 
     private fun createNewOrder() {
-        Thread {
-            var connector: OrderConnector? = null
+        activityScope.launch {
             try {
-                val account = CloverAccount.getAccount(this)
-                if (account == null) {
-                    mainHandler.post {
-                        if (isActivityDestroyed) return@post
+                val result = withContext(Dispatchers.IO) {
+                    var connector: OrderConnector? = null
+                    try {
+                        val account = CloverAccount.getAccount(this@MainActivity)
+                            ?: return@withContext null to "no_account"
+                        connector = OrderConnector(this@MainActivity, account, null)
+                        connector.connect()
+                        val order = connector.createOrder(Order())
+                        order.id to "ok"
+                    } catch (e: Exception) {
+                        Log.e(TAG, "MainActivity: failed to create order", e)
+                        null to "error"
+                    } finally {
+                        try {
+                            connector?.disconnect()
+                        } catch (e: Exception) {
+                            Log.w(TAG, "MainActivity: error disconnecting order connector", e)
+                        }
+                    }
+                }
+
+                val (newOrderId, status) = result
+                when {
+                    status == "no_account" -> {
                         tvStatus.text = getString(R.string.error_no_account)
                         Log.w(TAG, "MainActivity: CloverAccount is null")
                     }
-                    return@Thread
-                }
-                connector = OrderConnector(this, account, null)
-                connector.connect()
-                val order = connector.createOrder(Order())
-                val newOrderId = order.id
-                Log.d(TAG, "MainActivity: created new order $newOrderId")
-                mainHandler.post {
-                    if (isActivityDestroyed) return@post
-                    currentOrderId = newOrderId
-                    tvStatus.text = getString(R.string.ready_message)
-                    startObserving(newOrderId)
+                    status == "error" || newOrderId == null -> {
+                        tvStatus.text = getString(R.string.error_create_order)
+                    }
+                    else -> {
+                        Log.d(TAG, "MainActivity: created new order $newOrderId")
+                        currentOrderId = newOrderId
+                        tvStatus.text = getString(R.string.ready_message)
+                        startObserving(newOrderId)
+                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "MainActivity: failed to create order", e)
-                mainHandler.post {
-                    if (isActivityDestroyed) return@post
-                    tvStatus.text = getString(R.string.error_create_order)
-                }
-            } finally {
-                try {
-                    connector?.disconnect()
-                } catch (e: Exception) {
-                    Log.w(TAG, "MainActivity: error disconnecting order connector", e)
-                }
+                tvStatus.text = getString(R.string.error_create_order)
             }
-        }.start()
+        }
     }
 
     private fun startObserving(orderId: String) {
@@ -480,7 +504,6 @@ class MainActivity : android.app.Activity() {
     }
 
     private fun onNewItemAdded(orderId: String, currentItemNames: List<String>) {
-        if (isActivityDestroyed) return
         Log.d(TAG, "MainActivity: new item detected, requesting suggestion for ${currentItemNames.size} items")
         // In Clover mode, build priced items from inventory if available, else show names only
         orderItems.clear()
@@ -493,36 +516,35 @@ class MainActivity : android.app.Activity() {
         progressLoading.visibility = View.VISIBLE
 
         // Cancel any pending debounced suggestion request
-        suggestionDebounceRunnable?.let { mainHandler.removeCallbacks(it) }
+        suggestionJob?.cancel()
 
         // Debounce: wait 500ms for more items before requesting
-        suggestionDebounceRunnable = Runnable {
+        suggestionJob = activityScope.launch {
+            delay(500)
             val historySummary = upsellHistoryManager.getHistorySummary(currentItemNames)
             // Fire suggestion immediately - don't wait for customer data
             requestSuggestion(orderId, currentItemNames, historySummary, null)
         }
-        mainHandler.postDelayed(suggestionDebounceRunnable!!, 500)
     }
 
-    private fun requestSuggestion(orderId: String, currentItemNames: List<String>, historySummary: String?, customerPrompt: String?) {
-        aiService.getSuggestion(currentItemNames, upsellHistory = historySummary, customerContext = customerPrompt) { suggestion ->
-            if (isActivityDestroyed) return@getSuggestion
-            progressLoading.visibility = View.GONE
-            if (suggestion != null) {
-                // Check if suggested item is already in the current order
-                val isAlreadyInOrder = currentItemNames.any {
-                    it.equals(suggestion.itemName, ignoreCase = true)
-                }
-                if (isAlreadyInOrder) {
-                    Log.d(TAG, "Skipping suggestion - ${suggestion.itemName} already in order")
-                    return@getSuggestion
-                }
-                statsManager.recordShown()
-                showSuggestionCard(orderId, suggestion, currentItemNames)
-                updateStatsSummary()
-            } else {
-                Log.d(TAG, "MainActivity: AI returned no suggestion")
+    private suspend fun requestSuggestion(orderId: String, currentItemNames: List<String>, historySummary: String?, customerPrompt: String?) {
+        val suggestion = aiService.getSuggestion(currentItemNames, upsellHistory = historySummary, customerContext = customerPrompt)
+
+        progressLoading.visibility = View.GONE
+        if (suggestion != null) {
+            // Check if suggested item is already in the current order
+            val isAlreadyInOrder = currentItemNames.any {
+                it.equals(suggestion.itemName, ignoreCase = true)
             }
+            if (isAlreadyInOrder) {
+                Log.d(TAG, "Skipping suggestion - ${suggestion.itemName} already in order")
+                return
+            }
+            statsManager.recordShown()
+            showSuggestionCard(orderId, suggestion, currentItemNames)
+            updateStatsSummary()
+        } else {
+            Log.d(TAG, "MainActivity: AI returned no suggestion")
         }
     }
 
@@ -531,26 +553,26 @@ class MainActivity : android.app.Activity() {
 
         val card = SuggestionCardView(this)
         card.setOnAddClickListener { onResult ->
-            orderObserver?.addItemToOrder(orderId, suggestion.itemId) { success ->
-                runOnUiThread {
-                    if (isActivityDestroyed) return@runOnUiThread
-                    if (success) {
-                        Log.d(TAG, "MainActivity: added suggestion ${suggestion.itemName} to order")
-                        statsManager.recordAccepted(suggestion.price)
-                        upsellHistoryManager.recordAccepted(triggerItems, suggestion.itemName)
-                        updateStatsSummary()
-                    } else {
-                        Log.w(TAG, "MainActivity: failed to add suggestion to order")
-                    }
-                    onResult(success)
+            activityScope.launch {
+                val success = orderObserver?.addItemToOrder(orderId, suggestion.itemId) ?: false
+                if (success) {
+                    Log.d(TAG, "MainActivity: added suggestion ${suggestion.itemName} to order")
+                    statsManager.recordAccepted(suggestion.price)
+                    upsellHistoryManager.recordAccepted(triggerItems, suggestion.itemName)
+                    updateStatsSummary()
+                } else {
+                    Log.w(TAG, "MainActivity: failed to add suggestion to order")
                 }
-            } ?: onResult(false)
+                onResult(success)
+            }
         }
         card.setOnDismissClickListener {
-            statsManager.recordDismissed()
-            upsellHistoryManager.recordDismissed(triggerItems, suggestion.itemName)
-            card.dismiss()
-            updateStatsSummary()
+            activityScope.launch {
+                statsManager.recordDismissed()
+                upsellHistoryManager.recordDismissed(triggerItems, suggestion.itemName)
+                card.dismiss()
+                updateStatsSummary()
+            }
         }
 
         suggestionContainer.addView(card)
@@ -611,23 +633,23 @@ class MainActivity : android.app.Activity() {
     }
 
     private fun updateStatsSummary() {
-        val accepted = statsManager.getTodayAccepted()
-        if (accepted > 0) {
-            val revenue = statsManager.getTodayRevenueFormatted()
-            tvStatsSummary.text = "$accepted suggestion${if (accepted != 1) "s" else ""} accepted today (+$revenue)"
-            tvStatsSummary.visibility = View.VISIBLE
-        } else {
-            tvStatsSummary.visibility = View.GONE
+        activityScope.launch {
+            val accepted = statsManager.getTodayAccepted()
+            if (accepted > 0) {
+                val revenue = statsManager.getTodayRevenueFormatted()
+                tvStatsSummary.text = "$accepted suggestion${if (accepted != 1) "s" else ""} accepted today (+$revenue)"
+                tvStatsSummary.visibility = View.VISIBLE
+            } else {
+                tvStatsSummary.visibility = View.GONE
+            }
         }
     }
 
     override fun onDestroy() {
-        isActivityDestroyed = true
+        activityScope.cancel()
         super.onDestroy()
         pulseAnimator?.cancel()
         pulseAnimator = null
-        suggestionDebounceRunnable?.let { mainHandler.removeCallbacks(it) }
-        suggestionDebounceRunnable = null
         orderObserver?.stopObserving()
         orderObserver = null
         Log.d(TAG, "MainActivity: destroyed")

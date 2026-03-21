@@ -1,15 +1,18 @@
 package com.aleph.nudge.service
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import com.clover.sdk.util.CloverAccount
 import com.clover.sdk.v3.base.Reference
 import com.clover.sdk.v3.order.LineItem
 import com.clover.sdk.v3.order.OrderConnector
 import com.clover.sdk.v3.order.OrderV31Connector
-import java.util.concurrent.atomic.AtomicBoolean
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class OrderObserver(
     private val context: Context,
@@ -20,11 +23,10 @@ class OrderObserver(
         private const val TAG = "Nudge"
     }
 
-    private val mainHandler = Handler(Looper.getMainLooper())
+    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var orderConnector: OrderConnector? = null
     private var currentOrderId: String? = null
     private val knownLineItemIds = mutableSetOf<String>()
-    private val requestInFlight = AtomicBoolean(false)
 
     private val orderListener = object : OrderV31Connector.OnOrderUpdateListener {
         override fun onOrderUpdated(orderId: String?, selfChange: Boolean) {
@@ -34,7 +36,7 @@ class OrderObserver(
     }
 
     fun startObserving(orderId: String) {
-        Thread {
+        scope.launch(Dispatchers.IO) {
             try {
                 currentOrderId = orderId
                 synchronized(knownLineItemIds) {
@@ -43,7 +45,7 @@ class OrderObserver(
 
                 val account = CloverAccount.getAccount(context) ?: run {
                     Log.w(TAG, "OrderObserver: no Clover account")
-                    return@Thread
+                    return@launch
                 }
                 val connector = OrderConnector(context, account, null)
                 connector.connect()
@@ -66,7 +68,7 @@ class OrderObserver(
             } catch (e: Exception) {
                 Log.e(TAG, "OrderObserver: failed to start observing", e)
             }
-        }.start()
+        }
     }
 
     fun stopObserving() {
@@ -78,48 +80,40 @@ class OrderObserver(
             synchronized(knownLineItemIds) {
                 knownLineItemIds.clear()
             }
-            requestInFlight.set(false)
+            scope.cancel()
             Log.d(TAG, "OrderObserver: stopped observing")
         } catch (e: Exception) {
             Log.e(TAG, "OrderObserver: error stopping", e)
         }
     }
 
-    fun addItemToOrder(orderId: String, itemId: String, callback: (Boolean) -> Unit) {
-        Thread {
-            try {
-                val connector = orderConnector
-                if (connector == null) {
-                    Log.w(TAG, "OrderObserver: no connector for addItemToOrder")
-                    mainHandler.post { callback(false) }
-                    return@Thread
-                }
-
-                val lineItem = LineItem()
-                lineItem.item = Reference()
-                lineItem.item.id = itemId
-                connector.addCustomLineItem(orderId, lineItem, false)
-                Log.d(TAG, "OrderObserver: added item $itemId to order $orderId")
-                mainHandler.post { callback(true) }
-
-            } catch (e: Exception) {
-                Log.e(TAG, "OrderObserver: failed to add item to order", e)
-                mainHandler.post { callback(false) }
+    suspend fun addItemToOrder(orderId: String, itemId: String): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val connector = orderConnector
+            if (connector == null) {
+                Log.w(TAG, "OrderObserver: no connector for addItemToOrder")
+                return@withContext false
             }
-        }.start()
+
+            val lineItem = LineItem()
+            lineItem.item = Reference()
+            lineItem.item.id = itemId
+            connector.addCustomLineItem(orderId, lineItem, false)
+            Log.d(TAG, "OrderObserver: added item $itemId to order $orderId")
+            true
+
+        } catch (e: Exception) {
+            Log.e(TAG, "OrderObserver: failed to add item to order", e)
+            false
+        }
     }
 
     private fun checkForNewItems(orderId: String) {
-        if (requestInFlight.get()) {
-            Log.d(TAG, "OrderObserver: skipping, request already in flight")
-            return
-        }
-
-        Thread {
+        scope.launch(Dispatchers.IO) {
             try {
-                val connector = orderConnector ?: return@Thread
+                val connector = orderConnector ?: return@launch
                 val order = connector.getOrder(orderId)
-                if (order == null || order.lineItems == null) return@Thread
+                if (order == null || order.lineItems == null) return@launch
 
                 val newItemNames = ArrayList<String>()
                 var hasNew = false
@@ -141,16 +135,14 @@ class OrderObserver(
                 }
 
                 if (hasNew && newItemNames.isNotEmpty()) {
-                    requestInFlight.set(true)
-                    mainHandler.post {
+                    withContext(Dispatchers.Main) {
                         onNewItem(orderId, newItemNames)
-                        requestInFlight.set(false)
                     }
                 }
 
             } catch (e: Exception) {
                 Log.e(TAG, "OrderObserver: error checking for new items", e)
             }
-        }.start()
+        }
     }
 }

@@ -6,6 +6,11 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ImageButton
 import android.widget.TextView
 import com.aleph.nudge.data.StatsManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
 class StatsActivity : android.app.Activity() {
@@ -23,6 +28,7 @@ class StatsActivity : android.app.Activity() {
     private lateinit var rateCard: View
 
     private lateinit var statsManager: StatsManager
+    private val activityScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +62,11 @@ class StatsActivity : android.app.Activity() {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 
+    override fun onDestroy() {
+        activityScope.cancel()
+        super.onDestroy()
+    }
+
     private fun animateStatsIn() {
         val cards = listOf(revenueCard, shownCard, acceptedCard, rateCard)
         val offsetPx = 20f * resources.displayMetrics.density
@@ -73,23 +84,25 @@ class StatsActivity : android.app.Activity() {
     }
 
     private fun refreshStats() {
-        val shown = statsManager.getTodayShown()
-        val accepted = statsManager.getTodayAccepted()
-        val rate = statsManager.getAcceptanceRate()
-        val revenue = statsManager.getTodayRevenueFormatted()
+        activityScope.launch {
+            val shown = statsManager.getTodayShown()
+            val accepted = statsManager.getTodayAccepted()
+            val rate = statsManager.getAcceptanceRate()
+            val revenue = statsManager.getTodayRevenueFormatted()
 
-        if (shown == 0) {
-            tvNoData.visibility = View.VISIBLE
-            tvRevenue.text = "$0.00"
-            tvShown.text = "0"
-            tvAccepted.text = "0"
-            tvRate.text = "0%"
-        } else {
-            tvNoData.visibility = View.GONE
-            tvRevenue.text = revenue
-            tvShown.text = shown.toString()
-            tvAccepted.text = accepted.toString()
-            tvRate.text = "${rate.toInt()}%"
+            if (shown == 0) {
+                tvNoData.visibility = View.VISIBLE
+                tvRevenue.text = "$0.00"
+                tvShown.text = "0"
+                tvAccepted.text = "0"
+                tvRate.text = "0%"
+            } else {
+                tvNoData.visibility = View.GONE
+                tvRevenue.text = revenue
+                tvShown.text = shown.toString()
+                tvAccepted.text = accepted.toString()
+                tvRate.text = "${rate.toInt()}%"
+            }
         }
     }
 }

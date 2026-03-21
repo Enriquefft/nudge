@@ -1,67 +1,83 @@
 package com.aleph.nudge.data
 
-import android.content.Context
+import com.aleph.nudge.data.db.DailyStatsEntity
+import com.aleph.nudge.data.db.NudgeDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class StatsManager(context: Context) {
+class StatsManager(private val db: NudgeDatabase) {
 
-    private val prefs = context.getSharedPreferences("nudge_stats", Context.MODE_PRIVATE)
+    private val statsDao = db.statsDao()
 
-    private fun todayKey(suffix: String): String {
-        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
-        return "${sdf.format(java.util.Date())}_$suffix"
+    private fun todayKey(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        return sdf.format(Date())
     }
 
-    fun recordShown() {
-        increment(todayKey("shown"))
+    suspend fun recordShown() = withContext(Dispatchers.IO) {
+        statsDao.recordShown(todayKey())
     }
 
-    fun recordAccepted(priceInCents: Long) {
-        increment(todayKey("accepted"))
-        addRevenue(priceInCents)
+    suspend fun recordAccepted(priceInCents: Long) = withContext(Dispatchers.IO) {
+        statsDao.recordAccepted(todayKey(), priceInCents)
     }
 
-    fun recordDismissed() {
-        increment(todayKey("dismissed"))
+    suspend fun recordDismissed() = withContext(Dispatchers.IO) {
+        statsDao.recordDismissed(todayKey())
     }
 
-    fun getTodayShown(): Int = prefs.getInt(todayKey("shown"), 0)
+    suspend fun getTodayShown(): Int = withContext(Dispatchers.IO) {
+        statsDao.getByDate(todayKey())?.shown ?: 0
+    }
 
-    fun getTodayAccepted(): Int = prefs.getInt(todayKey("accepted"), 0)
+    suspend fun getTodayAccepted(): Int = withContext(Dispatchers.IO) {
+        statsDao.getByDate(todayKey())?.accepted ?: 0
+    }
 
-    fun getTodayDismissed(): Int = prefs.getInt(todayKey("dismissed"), 0)
+    suspend fun getTodayDismissed(): Int = withContext(Dispatchers.IO) {
+        statsDao.getByDate(todayKey())?.dismissed ?: 0
+    }
 
-    fun getTodayRevenue(): Long = prefs.getLong(todayKey("revenue"), 0L)
+    suspend fun getTodayRevenue(): Long = withContext(Dispatchers.IO) {
+        statsDao.getByDate(todayKey())?.revenueCents ?: 0L
+    }
 
-    fun getAcceptanceRate(): Float {
+    suspend fun getAcceptanceRate(): Float {
         val shown = getTodayShown()
         if (shown == 0) return 0f
         return getTodayAccepted().toFloat() / shown.toFloat() * 100f
     }
 
-    fun getTodayRevenueFormatted(): String {
+    suspend fun getTodayRevenueFormatted(): String {
         val cents = getTodayRevenue()
         return "$${cents / 100}.${"%02d".format(cents % 100)}"
     }
 
-    /** Returns true if demo data has already been seeded for today. */
-    fun hasDemoData(): Boolean = getTodayShown() > 0
-
-    /** Pre-seeds realistic stats for a busy morning demo shift. */
-    fun seedDemoData() {
-        prefs.edit()
-            .putInt(todayKey("shown"), 47)
-            .putInt(todayKey("accepted"), 28)
-            .putInt(todayKey("dismissed"), 6)
-            .putLong(todayKey("revenue"), 8450L)
-            .apply()
+    /**
+     * Returns true if demo data has already been seeded for today.
+     * Uses runBlocking because it is called from Application.onCreate().
+     */
+    fun hasDemoData(): Boolean = runBlocking(Dispatchers.IO) {
+        (statsDao.getByDate(todayKey())?.shown ?: 0) > 0
     }
 
-    private fun increment(key: String) {
-        prefs.edit().putInt(key, prefs.getInt(key, 0) + 1).apply()
-    }
-
-    private fun addRevenue(cents: Long) {
-        val key = todayKey("revenue")
-        prefs.edit().putLong(key, prefs.getLong(key, 0L) + cents).apply()
+    /**
+     * Pre-seeds realistic stats for a busy morning demo shift.
+     * Uses runBlocking because it is called from Application.onCreate().
+     */
+    fun seedDemoData() = runBlocking(Dispatchers.IO) {
+        statsDao.upsert(
+            DailyStatsEntity(
+                date = todayKey(),
+                shown = 47,
+                accepted = 28,
+                dismissed = 6,
+                revenueCents = 8450L
+            )
+        )
     }
 }

@@ -1,7 +1,5 @@
 package com.aleph.nudge.service
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import com.aleph.nudge.BuildConfig
 import com.aleph.nudge.model.MenuItem
@@ -9,6 +7,8 @@ import com.aleph.nudge.model.Suggestion
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -29,7 +29,9 @@ class AiService {
         .build()
 
     private val gson = Gson()
-    private val mainHandler = Handler(Looper.getMainLooper())
+
+    /** Set by NudgeApplication after initialization. */
+    var backendClient: BackendClient? = null
 
     private var systemPrompt: String = ""
     private val knownItems = ConcurrentHashMap<String, MenuItem>()
@@ -68,34 +70,31 @@ $modifierLines"""
         Log.d(TAG, "AiService: menu context set with ${items.size} items")
     }
 
-    fun getSuggestion(
+    suspend fun getSuggestion(
         currentItems: List<String>,
         upsellHistory: String? = null,
-        customerContext: String? = null,
-        callback: (Suggestion?) -> Unit
-    ) {
+        customerContext: String? = null
+    ): Suggestion? = withContext(Dispatchers.IO) {
         if (systemPrompt.isEmpty()) {
             Log.w(TAG, "AiService: no menu context set")
-            mainHandler.post { callback(null) }
-            return
+            return@withContext null
         }
 
-        Thread {
-            try {
-                val orderList = currentItems.joinToString(", ")
+        try {
+            val orderList = currentItems.joinToString(", ")
 
-                val contextSections = mutableListOf<String>()
-                contextSections.add("Current order: $orderList")
+            val contextSections = mutableListOf<String>()
+            contextSections.add("Current order: $orderList")
 
-                if (upsellHistory != null) {
-                    contextSections.add(upsellHistory)
-                }
+            if (upsellHistory != null) {
+                contextSections.add(upsellHistory)
+            }
 
-                if (customerContext != null) {
-                    contextSections.add(customerContext)
-                }
+            if (customerContext != null) {
+                contextSections.add(customerContext)
+            }
 
-                val userPrompt = """${contextSections.joinToString("\n\n")}
+            val userPrompt = """${contextSections.joinToString("\n\n")}
 
 Suggest ONE complementary item or modifier from this merchant's menu.
 
@@ -111,54 +110,67 @@ Rules:
 - If upsell history is provided, AVOID items with low acceptance rates and FAVOR items that customers frequently accept
 - If customer data is provided, personalize the suggestion to their preferences"""
 
-                val messagesArray = com.google.gson.JsonArray()
+            val messagesArray = com.google.gson.JsonArray()
 
-                val sysMsg = JsonObject()
-                sysMsg.addProperty("role", "system")
-                sysMsg.addProperty("content", systemPrompt)
-                messagesArray.add(sysMsg)
+            val sysMsg = JsonObject()
+            sysMsg.addProperty("role", "system")
+            sysMsg.addProperty("content", systemPrompt)
+            messagesArray.add(sysMsg)
 
-                val userMsg = JsonObject()
-                userMsg.addProperty("role", "user")
-                userMsg.addProperty("content", userPrompt)
-                messagesArray.add(userMsg)
+            val userMsg = JsonObject()
+            userMsg.addProperty("role", "user")
+            userMsg.addProperty("content", userPrompt)
+            messagesArray.add(userMsg)
 
-                val requestBody = JsonObject()
-                requestBody.addProperty("model", BuildConfig.ZAI_MODEL)
-                requestBody.addProperty("max_tokens", 256)
-                requestBody.addProperty("temperature", 0.7)
-                requestBody.add("messages", messagesArray)
+            val requestBody = JsonObject()
+            requestBody.addProperty("model", BuildConfig.ZAI_MODEL)
+            requestBody.addProperty("max_tokens", 256)
+            requestBody.addProperty("temperature", 0.7)
+            requestBody.add("messages", messagesArray)
 
-                val body = gson.toJson(requestBody).toRequestBody(JSON_MEDIA_TYPE)
+            val requestBodyJson = gson.toJson(requestBody)
 
-                val request = Request.Builder()
-                    .url("${BuildConfig.ZAI_BASE_URL}/chat/completions")
-                    .addHeader("Authorization", "Bearer ${BuildConfig.ZAI_API_KEY}")
-                    .addHeader("Content-Type", "application/json")
-                    .post(body)
-                    .build()
-
-                val response = client.newCall(request).execute()
-                val responseBody = response.body?.string()
-
-                if (!response.isSuccessful || responseBody == null) {
-                    Log.e(TAG, "AiService: API error code=${response.code} body=$responseBody")
-                    mainHandler.post { callback(null) }
-                    return@Thread
-                }
-
-                Log.d(TAG, "AiService: API response received, parsing...")
-                val suggestion = parseResponse(responseBody)
+            // Try backend proxy first (centralizes API key management).
+            val backendResponse = backendClient?.proxySuggest(requestBodyJson)
+            if (backendResponse != null) {
+                Log.d(TAG, "AiService: got response via backend proxy")
+                val suggestion = parseResponse(backendResponse)
                 if (suggestion == null) {
-                    Log.w(TAG, "AiService: parseResponse returned null")
+                    Log.w(TAG, "AiService: parseResponse returned null (backend proxy)")
                 }
-                mainHandler.post { callback(suggestion) }
-
-            } catch (e: Exception) {
-                Log.e(TAG, "AiService: request failed: ${e.message}", e)
-                mainHandler.post { callback(null) }
+                return@withContext suggestion
             }
-        }.start()
+
+            // Fallback: direct call to Z.ai
+            Log.d(TAG, "AiService: backend proxy unavailable, falling back to direct Z.ai")
+            val body = requestBodyJson.toRequestBody(JSON_MEDIA_TYPE)
+
+            val request = Request.Builder()
+                .url("${BuildConfig.ZAI_BASE_URL}/chat/completions")
+                .addHeader("Authorization", "Bearer ${BuildConfig.ZAI_API_KEY}")
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build()
+
+            val response = client.newCall(request).execute()
+            val responseBody = response.body?.string()
+
+            if (!response.isSuccessful || responseBody == null) {
+                Log.e(TAG, "AiService: API error code=${response.code} body=$responseBody")
+                return@withContext null
+            }
+
+            Log.d(TAG, "AiService: API response received (direct), parsing...")
+            val suggestion = parseResponse(responseBody)
+            if (suggestion == null) {
+                Log.w(TAG, "AiService: parseResponse returned null")
+            }
+            suggestion
+
+        } catch (e: Exception) {
+            Log.e(TAG, "AiService: request failed: ${e.message}", e)
+            null
+        }
     }
 
     private fun parseResponse(responseBody: String): Suggestion? {
