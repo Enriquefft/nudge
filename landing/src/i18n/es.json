@@ -79,6 +79,11 @@
 		"p4Num": "$72K+",
 		"p4Label": "ingresos anuales potenciales"
 	},
+	"testimonial": {
+		"quote": "Esto es mejor que mi capacitación.",
+		"attribution": "Empleada de restaurante Taambo",
+		"context": "Después de usar Nudge en un turno de prueba"
+	},
 	"cta": {
 		"heading": "Míralo en acción con tu menú",
 		"sub": "15 minutos. Lo configuramos con tu menú para que lo veas funcionar.",
