@@ -37,7 +37,7 @@ android {
         buildConfigField("String", "ZAI_BASE_URL", "\"https://api.z.ai/api/paas/v4\"")
         buildConfigField("String", "ZAI_MODEL", "\"glm-4.7-flash\"")
         buildConfigField("String", "SENTRY_DSN", "\"${localProperties.getProperty("SENTRY_DSN", "")}\"")
-        buildConfigField("String", "BACKEND_URL", "\"${localProperties.getProperty("BACKEND_URL", "https://nudge-api.fly.dev")}\"")
+        buildConfigField("String", "BACKEND_URL", "\"${localProperties.getProperty("BACKEND_URL", "https://nudge-api-morning-pond-3829.fly.dev")}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
