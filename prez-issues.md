@@ -257,6 +257,53 @@ required meta tags in `index.html`. Sensible defaults would be:
 
 ---
 
+## 7. Fullscreen API not functional on Firefox Android
+
+**Description:**
+The Fullscreen API (`document.documentElement.requestFullscreen()`) does not work on
+Firefox for Android. The floating fullscreen button we added (issue #5 workaround) either
+does not appear (API reports as unsupported) or fails silently when tapped.
+
+**Impact:**
+There is no way to enter fullscreen on Firefox Android -- neither the `F` key shortcut
+nor the custom button nor any browser-level UI. The deck always shows with full browser
+chrome (address bar, toolbar).
+
+**Root cause:**
+Firefox for Android has historically had incomplete or broken Fullscreen API support.
+Unlike Chrome Android, which reliably supports `requestFullscreen()`, Firefox Android
+either does not expose the API or silently rejects the call. This is a browser limitation,
+not a prez bug, but prez offers no alternative for this scenario.
+
+**Workaround:**
+Use Chrome on Android for presenting. For Firefox users, the deck is still navigable
+via touch swipe but will always show browser UI.
+
+---
+
+## 8. PWA "Add to Home Screen" creates a bookmark, not a standalone app (Firefox Android)
+
+**Description:**
+On Firefox for Android, "Add to Home Screen" creates a simple URL shortcut that opens
+in a regular Firefox tab with full browser chrome. The `manifest.json` with
+`"display": "fullscreen"` is ignored.
+
+**Impact:**
+The PWA standalone/fullscreen mode we configured does not work on Firefox Android. The
+home screen icon launches a normal browser tab, defeating the purpose of the manifest.
+
+**Root cause:**
+Firefox for Android does not support installing Progressive Web Apps. Unlike Chrome
+Android (which reads `manifest.json` and launches PWAs in standalone/fullscreen mode),
+Firefox only creates a bookmark-style shortcut. The manifest `display` property is
+completely ignored. This is a long-standing Firefox limitation.
+
+**Workaround:**
+Use Chrome on Android for the "Add to Home Screen" PWA experience. Alternatively,
+share the PPTX file for offline mobile viewing.
+
+---
+
 ## Summary table
 
 | # | Issue                              | Severity | Prez bug? | Workaround available? |
@@ -267,3 +314,5 @@ required meta tags in `index.html`. Sensible defaults would be:
 | 4 | PDF export: broken images           | High     | Yes       | Yes (use PPTX)       |
 | 5 | No fullscreen button for mobile     | Medium   | Yes       | Yes (custom button)  |
 | 6 | No PWA/manifest support             | Medium   | Yes       | Yes (manual setup)   |
+| 7 | Fullscreen API broken on Firefox Android | High | No (browser) | Use Chrome         |
+| 8 | PWA install not supported on Firefox Android | High | No (browser) | Use Chrome      |
