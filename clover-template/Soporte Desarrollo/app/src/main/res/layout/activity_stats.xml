@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/surface_primary">
+
+    <!-- Toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/brand_primary"
+        android:elevation="@dimen/elevation_card"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/space_md"
+        android:paddingEnd="@dimen/space_md"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="@color/text_on_brand"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/stats_title"
+            android:textColor="@color/text_on_brand"
+            android:textSize="@dimen/text_subheading"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginStart="@dimen/space_sm" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_lg">
+
+            <!-- Revenue highlight card -->
+            <LinearLayout
+                android:id="@+id/card_revenue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_background"
+                android:elevation="@dimen/elevation_card"
+                android:orientation="vertical"
+                android:padding="@dimen/space_xl"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/space_md">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stats_additional_revenue"
+                    android:textSize="@dimen/text_secondary_size"
+                    android:textColor="@color/text_secondary"
+                    android:fontFamily="sans-serif"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tv_revenue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$0.00"
+                    android:textSize="@dimen/text_display"
+                    android:textColor="@color/semantic_success"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginTop="@dimen/space_sm" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="added to orders today"
+                    android:textSize="@dimen/text_secondary_size"
+                    android:textColor="@color/text_tertiary"
+                    android:layout_marginTop="@dimen/space_xs" />
+
+            </LinearLayout>
+
+            <!-- Stats grid (2x2) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/space_md">
+
+                <!-- Suggestions shown -->
+                <LinearLayout
+                    android:id="@+id/card_shown"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/stat_card_background"
+                    android:elevation="@dimen/elevation_subtle"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_lg"
+                    android:gravity="center"
+                    android:layout_marginEnd="@dimen/space_sm">
+
+                    <TextView
+                        android:id="@+id/tv_shown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        style="@style/StatValue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stats_suggestions_shown"
+                        style="@style/StatLabel"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/space_xs" />
+
+                </LinearLayout>
+
+                <!-- Accepted -->
+                <LinearLayout
+                    android:id="@+id/card_accepted"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/stat_card_background"
+                    android:elevation="@dimen/elevation_subtle"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_lg"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/space_sm">
+
+                    <TextView
+                        android:id="@+id/tv_accepted"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        style="@style/StatValue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stats_accepted"
+                        style="@style/StatLabel"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/space_xs" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Acceptance rate -->
+            <LinearLayout
+                android:id="@+id/card_rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/stat_card_background"
+                android:elevation="@dimen/elevation_subtle"
+                android:orientation="vertical"
+                android:padding="@dimen/space_lg"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/space_xl">
+
+                <TextView
+                    android:id="@+id/tv_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0%"
+                    style="@style/StatValue"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stats_acceptance_rate"
+                    style="@style/StatLabel"
+                    android:layout_marginTop="@dimen/space_xs" />
+
+            </LinearLayout>
+
+            <!-- No data message -->
+            <TextView
+                android:id="@+id/tv_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/stats_no_data"
+                android:textSize="@dimen/text_body"
+                android:textColor="@color/text_tertiary"
+                android:gravity="center"
+                android:padding="@dimen/space_xl"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

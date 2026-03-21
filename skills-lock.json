@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skills": {
+    "prez": {
+      "source": "Enriquefft/prez",
+      "sourceType": "github",
+      "computedHash": "7e8a2f8624f387334f9df33ae217ca554aa7a24d272c996e28f96398bf5d5722"
+    },
+    "prez-image": {
+      "source": "Enriquefft/prez",
+      "sourceType": "github",
+      "computedHash": "a76378dd2139a6c9a30732944f2e6cc3cabfc4455acb8e6736c0f584e0ad2384"
+    }
+  }
+}

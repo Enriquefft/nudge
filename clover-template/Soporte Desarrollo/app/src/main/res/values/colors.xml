@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand -->
+    <color name="brand_primary">#1B6B4A</color>
+    <color name="brand_primary_light">#2A8C63</color>
+    <color name="brand_primary_dark">#0F4D35</color>
+    <color name="brand_primary_surface">#E8F5EE</color>
+
+    <!-- Accent — warm amber for CTAs -->
+    <color name="accent">#E8720C</color>
+    <color name="accent_light">#FF8F2E</color>
+    <color name="accent_surface">#FFF3E6</color>
+
+    <!-- Neutrals — brand-tinted, not dead gray -->
+    <color name="surface_primary">#FAFBF9</color>
+    <color name="surface_secondary">#F2F4F0</color>
+    <color name="surface_card">#FEFFFE</color>
+    <color name="surface_elevated">#FFFFFF</color>
+
+    <!-- Text — never pure black -->
+    <color name="text_primary">#1A2B23</color>
+    <color name="text_secondary">#5A6B63</color>
+    <color name="text_tertiary">#8A9B93</color>
+    <color name="text_on_brand">#F5FBF8</color>
+    <color name="text_on_accent">#FFFCF8</color>
+
+    <!-- Semantic -->
+    <color name="semantic_success">#1B8C5A</color>
+    <color name="semantic_success_surface">#E6F7EE</color>
+    <color name="semantic_error">#C4382A</color>
+    <color name="semantic_error_surface">#FDE8E6</color>
+
+    <!-- Borders & dividers -->
+    <color name="border_subtle">#E2E8E4</color>
+    <color name="border_strong">#C5CEC8</color>
+
+    <!-- Overlays -->
+    <color name="overlay_scrim">#401A2B23</color>
+    <color name="ripple_light">#18FFFFFF</color>
+    <color name="ripple_dark">#0D1A2B23</color>
+</resources>

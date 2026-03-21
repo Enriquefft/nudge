@@ -1,0 +1,9 @@
+.env
+.env.*
+*.local.json
+.idea/
+__MACOSX/
+hs_err_pid*.log
+*.jks
+node_modules/
+.vercel/

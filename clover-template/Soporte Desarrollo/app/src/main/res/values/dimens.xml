@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing scale (4dp grid) -->
+    <dimen name="space_2xs">2dp</dimen>
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_md">16dp</dimen>
+    <dimen name="space_lg">24dp</dimen>
+    <dimen name="space_xl">32dp</dimen>
+    <dimen name="space_2xl">48dp</dimen>
+    <dimen name="space_3xl">64dp</dimen>
+
+    <!-- Typography scale -->
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_secondary_size">14sp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="text_subheading">20sp</dimen>
+    <dimen name="text_heading">28sp</dimen>
+    <dimen name="text_headline">36sp</dimen>
+    <dimen name="text_display">48sp</dimen>
+
+    <!-- Component sizes -->
+    <dimen name="button_height">52dp</dimen>
+    <dimen name="button_min_width">120dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="touch_target_min">48dp</dimen>
+
+    <!-- Corners -->
+    <dimen name="corner_sm">8dp</dimen>
+    <dimen name="corner_md">12dp</dimen>
+    <dimen name="corner_lg">16dp</dimen>
+    <dimen name="corner_xl">20dp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="elevation_subtle">2dp</dimen>
+    <dimen name="elevation_card">4dp</dimen>
+    <dimen name="elevation_floating">8dp</dimen>
+    <dimen name="elevation_overlay">12dp</dimen>
+
+    <!-- Card-specific -->
+    <dimen name="card_margin_h">20dp</dimen>
+    <dimen name="card_margin_bottom">24dp</dimen>
+    <dimen name="card_padding">24dp</dimen>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Nudge</string>
+    <string name="stats_title">Today\'s Performance</string>
+    <string name="add_to_order">Add to Order</string>
+    <string name="dismiss">Not Now</string>
+    <string name="suggestion_label">Suggested Add-On</string>
+    <string name="stats_suggestions_shown">Suggestions Shown</string>
+    <string name="stats_accepted">Accepted</string>
+    <string name="stats_acceptance_rate">Acceptance Rate</string>
+    <string name="stats_additional_revenue">Additional Revenue</string>
+    <string name="stats_no_data">No suggestions yet today. Start taking orders!</string>
+    <string name="loading_menu">Loading menu...</string>
+    <string name="waiting_for_order">Waiting for order activity...</string>
+    <string name="menu_stats">Performance</string>
+    <string name="ready_message">Ready! Add items to an order to see suggestions.</string>
+    <string name="standalone_mode_status">Ready! Tap + to add items and see suggestions.</string>
+    <string name="standalone_instruction">Tap + to add items to the order</string>
+    <string name="item_added">Added: %s</string>
+    <string name="added_confirmation">Added!</string>
+    <string name="suggestion_subtext">Suggestions will appear here when items are added</string>
+</resources>

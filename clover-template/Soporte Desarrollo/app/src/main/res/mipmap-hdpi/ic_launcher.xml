@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Green circle background -->
+    <path
+        android:fillColor="#1B6B4A"
+        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0" />
+    <!-- White speech bubble with arrow cutout -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="
+            M15,10
+            L34,10
+            C35.7,10 37,11.3 37,13
+            L37,28
+            C37,29.7 35.7,31 34,31
+            L21,31
+            L15,37
+            L15,31
+            L13,31
+            C11.3,31 10,29.7 10,28
+            L10,13
+            C10,11.3 11.3,10 13,10
+            Z
+            M23.5,14
+            L30,21
+            L26,21
+            L26,28
+            L21,28
+            L21,21
+            L17,21
+            Z" />
+</vector>
