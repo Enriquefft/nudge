@@ -1,5 +1,5 @@
 app = "nudge-api"
-primary_region = "mia"
+primary_region = "iad"
 
 [build]
   dockerfile = "Dockerfile"

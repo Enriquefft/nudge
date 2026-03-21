@@ -17,6 +17,9 @@
             jdk17
             android-tools
             gradle
+            go
+            postgresql
+            flyctl
           ];
 
           JAVA_HOME = "${pkgs.jdk17}";
