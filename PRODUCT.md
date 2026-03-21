@@ -12,19 +12,26 @@ AI-powered Clover app that helps merchants sell more and retain customers by ana
 - "Customers who buy X also buy Y" powered by the merchant's own data
 - Merchant sees suggestion, can offer it to customer verbally
 
-### 2. Customer Retention Alerts
+### 2. Adaptive Upsell Intelligence (Roadmap — HIGH priority)
+- AI learns from accept/dismiss history per item pair
+- Suggestions improve over time: avoids repeatedly dismissed combos, favors high-converting ones
+- When customer data is available (Clover CustomerConnector), personalizes suggestions based on that customer's order history and preferences
+- Zero config: works out of the box, gets smarter with usage
+- Key differentiator: competing POS upsell tools use static rules; Nudge adapts
+
+### 3. Customer Retention Alerts
 - Track repeat customers via payment methods
 - "This regular hasn't visited in 2 weeks" notification
 - Auto-generated promo offer or loyalty reward
 - Simple CRM built into the POS
 
-### 3. Revenue Dashboard with AI Insights
+### 4. Revenue Dashboard with AI Insights
 - Daily/weekly revenue trends
 - "Tuesday lunch revenue dropped 15% vs last month"
 - AI-generated actionable recommendations
 - Accessible right from the Clover device
 
-### 4. Merchant-to-Merchant Network
+### 5. Merchant-to-Merchant Network
 - Local merchants referring customers to each other
 - Cross-promotion opportunities
 

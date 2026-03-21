@@ -18,11 +18,12 @@
 
 ## The Upselling Gap
 
-- Only **63%** of sales professionals actively upsell — **37% avoid it entirely**
+- Only **63%** of sales professionals actively upsell — **37% avoid it entirely** (WiserNotify — general sales professionals, not restaurant-specific)
+- In restaurants, only **45% of human-handled orders** include an upsell attempt, meaning **55% of orders get no upsell** (Red Lobster/SoundHound 8-month study, via Hostie AI)
 - **55%** believe upselling is their biggest growth opportunity but don't act
 - **85% of customers won't respond to irrelevant cross-selling** (CEB)
 - Key blockers: fear of being pushy, irrelevant offers, no training, no strategy
-- **AI upsells on 78% of interactions** vs human staff at 45%
+- **AI upsells on 78% of interactions** vs human staff at 45% (Red Lobster/SoundHound 8-month deployment, via Hostie AI)
 
 ## AI-Powered Recommendations
 
@@ -83,7 +84,7 @@
 
 | Pain Point | Stat | Implication |
 |---|---|---|
-| Merchants not upselling | 37% avoid it | AI removes human hesitation |
+| Orders without upsell | 55% of orders get no attempt | AI removes human hesitation |
 | Revenue from repeats | 61% of SMBs: >50% is repeat | Retention = protecting majority of revenue |
 | Acquisition cost crisis | 5-10x more expensive | Retention ROI is overwhelming |
 | Loyalty program gap | Only 34% of SMBs have one | Low-hanging fruit for AI-assisted loyalty |
@@ -92,8 +93,10 @@
 
 ## Sources
 
+- [Human vs AI: Upsell Rates in Real Restaurants — Hostie AI](https://hostie.ai/resources/human-vs-ai-phone-order-accuracy-upsell-rates-real-restaurants) — Red Lobster/SoundHound 8-month study: 78% AI vs 45% human upsell attempt rate; $3K-$18K/mo additional revenue per location
+- [AI Phone Ordering: 500K Calls Analysis — Hostie AI](https://hostie.ai/resources/ai-phone-ordering-increase-average-ticket-size-500k-calls-analysis) — Bella Vista Bistro: 14.7% ticket increase = $127.5K/year additional
 - [Upselling Statistics 2026 — WiserReview](https://wiserreview.com/blog/upselling-and-cross-selling-statistics/)
-- [Cross Selling Statistics 2025 — WiserNotify](https://wisernotify.com/blog/upselling-and-crossselling-stats/)
+- [Cross Selling Statistics 2025 — WiserNotify](https://wisernotify.com/blog/upselling-and-crossselling-stats/) — 37% of sales professionals avoid upselling (general, not restaurant-specific)
 - [Restaurant Sales Statistics — Restroworks](https://www.restroworks.com/blog/restaurant-sales-statistics/)
 - [Increase Ticket Size — Clover Blog](https://blog.clover.com/enterprise-behavior-how-to-increase-ticket-size-at-your-restaurant/)
 - [AI Recommendation System — Shopify](https://www.shopify.com/blog/ai-recommendation-system)
@@ -102,3 +105,13 @@
 - [Loyalty Statistics — SAP Emarsys](https://emarsys.com/learn/blog/customer-loyalty-statistics/)
 - [Loyalty Program ROI — Stamp Me](https://www.stampme.com/blog/customer-loyalty-programs-roi-small-businesses)
 - [Data Analytics Stats — Folio3](https://data.folio3.com/blog/data-analytics-stats/)
+
+## Landing Page Stats → Source Map
+
+| Landing Page Stat | Source |
+|---|---|
+| 55% of orders get no upsell attempt | Red Lobster/SoundHound 8-month study (Hostie AI) — only 45% of human calls included upsell |
+| $6K+ monthly revenue missed per location | Derived: 100 txns/day × $25 avg × 10pt upsell improvement × $6/upsell (see Revenue Leakage above); also within Hostie AI $3K-$18K/mo range |
+| 78% AI upsell rate vs 45% for humans | Red Lobster/SoundHound 8-month deployment (Hostie AI) |
+| 15-30% higher average tickets | Multiple: kiosk/digital ordering studies (Restroworks), AI upselling (WiserReview), Hostie AI |
+| $72K+ potential yearly revenue | Derived: $6K/mo × 12 = $72K (conservative end of Hostie AI $3K-$18K/mo range) |

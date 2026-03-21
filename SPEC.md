@@ -61,7 +61,16 @@ This is the only UI judges will see. It must look like it belongs on a Clover de
 - Match Clover's Material Design aesthetic (colors, typography, spacing)
 - High contrast, readable from arm's length
 
-### 5. Acceptance Tracking + Stats Screen ← MEDIUM
+### 5. Adaptive Intelligence (Learning from Outcomes) ← HIGH
+
+The AI gets smarter over time by learning what works for this specific merchant.
+
+- **Upsell outcome tracking:** Every accept/dismiss is recorded per trigger-item → suggested-item pair. The AI prompt includes historical win/loss data so it avoids suggestions that get dismissed and doubles down on ones that convert.
+- **Customer-aware suggestions (when available):** If the merchant has Clover customer data (via CustomerConnector), Nudge pulls the current customer's order history and preferences. The AI uses this to personalize: "This customer orders a milkshake 80% of the time" → suggest milkshake first.
+- Graceful degradation: customer data is optional. Works without it, better with it.
+- All learning data stays local to the merchant's device (SharedPreferences).
+
+### 6. Acceptance Tracking + Stats Screen ← MEDIUM
 
 Proof that the app works. Essential for the demo. Merchants check this daily.
 

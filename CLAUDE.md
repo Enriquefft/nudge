@@ -20,9 +20,15 @@ Read these files only when relevant to the task at hand.
 - `research/05-business-model-pricing.md` — SaaS pricing models for Clover apps
 - `research/06-clover-developer-apis.md` — Clover developer platform APIs reference
 
+## Clover App
+- `app/` — Clover Android app (Kotlin, inside `Soporte Desarrollo/`)
+
 ## Presentation
 - `deck/` — Slide deck project (React/prez framework)
 - `prez-issues.md` — Known issues and workarounds for the prez slide framework
+
+## Landing Page
+- `landing/` — Astro landing page (nudge.404tf.com)
 
 ## Build
 - `flake.nix` — Nix dev environment; run `direnv reload` after changes
