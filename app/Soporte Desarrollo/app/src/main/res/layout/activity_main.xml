@@ -222,8 +222,7 @@
         style="@android:style/Widget.ProgressBar"
         android:layout_width="@dimen/space_xl"
         android:layout_height="@dimen/space_xl"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="120dp"
+        android:layout_gravity="center"
         android:indeterminateTint="@color/brand_primary"
         android:visibility="gone" />
 
