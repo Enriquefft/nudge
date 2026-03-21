@@ -1,0 +1,16 @@
+{
+  "name": "Nudge — Pitch Deck",
+  "short_name": "Nudge Deck",
+  "start_url": "/deck/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0a1f15",
+  "theme_color": "#0a1f15",
+  "icons": [
+    {
+      "src": "/deck/nudge-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

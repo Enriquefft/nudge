@@ -60,7 +60,7 @@ function createSlides(t: Translations) {
               <p className="text-lg font-semibold mb-2">{t.solution.step1}</p>
               <p className="text-white/40 text-sm">{t.solution.step1desc}</p>
             </div>
-            <div className="text-[#4ADE80]/40 text-3xl">&rarr;</div>
+            <div className="text-[#4ADE80]/40 text-3xl">→</div>
             <div className="flex-1 text-center">
               <div className="w-16 h-16 rounded-2xl bg-[#1B6B4A] flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-white">2</span>
@@ -68,7 +68,7 @@ function createSlides(t: Translations) {
               <p className="text-lg font-semibold mb-2">{t.solution.step2}</p>
               <p className="text-white/40 text-sm">{t.solution.step2desc}</p>
             </div>
-            <div className="text-[#4ADE80]/40 text-3xl">&rarr;</div>
+            <div className="text-[#4ADE80]/40 text-3xl">→</div>
             <div className="flex-1 text-center">
               <div className="w-16 h-16 rounded-2xl bg-[#1B6B4A] flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-white">3</span>
@@ -76,7 +76,7 @@ function createSlides(t: Translations) {
               <p className="text-lg font-semibold mb-2">{t.solution.step3}</p>
               <p className="text-white/40 text-sm">{t.solution.step3desc}</p>
             </div>
-            <div className="text-[#4ADE80]/40 text-3xl">&rarr;</div>
+            <div className="text-[#4ADE80]/40 text-3xl">→</div>
             <div className="flex-1 text-center">
               <div className="w-16 h-16 rounded-2xl bg-[#E8720C] flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-white">4</span>
@@ -99,19 +99,19 @@ function createSlides(t: Translations) {
               <div className="space-y-5">
                 <div className="flex items-start gap-4">
                   <div className="w-2 h-2 rounded-full bg-[#4ADE80] mt-2 flex-shrink-0" />
-                  <p className="text-white/70 text-lg"><span className="text-white font-medium">{t.product.f1bold}</span> &mdash; {t.product.f1}</p>
+                  <p className="text-white/70 text-lg"><span className="text-white font-medium">{t.product.f1bold}</span> — {t.product.f1}</p>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-2 h-2 rounded-full bg-[#4ADE80] mt-2 flex-shrink-0" />
-                  <p className="text-white/70 text-lg"><span className="text-white font-medium">{t.product.f2bold}</span> &mdash; {t.product.f2}</p>
+                  <p className="text-white/70 text-lg"><span className="text-white font-medium">{t.product.f2bold}</span> — {t.product.f2}</p>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-2 h-2 rounded-full bg-[#4ADE80] mt-2 flex-shrink-0" />
-                  <p className="text-white/70 text-lg"><span className="text-white font-medium">{t.product.f3bold}</span> &mdash; {t.product.f3}</p>
+                  <p className="text-white/70 text-lg"><span className="text-white font-medium">{t.product.f3bold}</span> — {t.product.f3}</p>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-2 h-2 rounded-full bg-[#4ADE80] mt-2 flex-shrink-0" />
-                  <p className="text-white/70 text-lg"><span className="text-white font-medium">{t.product.f4bold}</span> &mdash; {t.product.f4}</p>
+                  <p className="text-white/70 text-lg"><span className="text-white font-medium">{t.product.f4bold}</span> — {t.product.f4}</p>
                 </div>
               </div>
             </div>
@@ -241,40 +241,40 @@ function createSlides(t: Translations) {
               <p className="text-lg font-bold text-[#4ADE80] mb-1">{t.competitive.nudge}</p>
               <p className="text-xs text-white/30 mb-4">{t.competitive.nudgeSub}</p>
               <div className="space-y-2 text-sm">
-                <p className="text-white/70">&check; {t.competitive.n1}</p>
-                <p className="text-white/70">&check; {t.competitive.n2}</p>
-                <p className="text-white/70">&check; {t.competitive.n3}</p>
-                <p className="text-white/70">&check; {t.competitive.n4}</p>
+                <p className="text-white/70">✓ {t.competitive.n1}</p>
+                <p className="text-white/70">✓ {t.competitive.n2}</p>
+                <p className="text-white/70">✓ {t.competitive.n3}</p>
+                <p className="text-white/70">✓ {t.competitive.n4}</p>
               </div>
             </div>
             <div className="border border-white/10 rounded-2xl p-6 bg-white/[0.03]">
               <p className="text-lg font-bold text-white/60 mb-1">{t.competitive.toast}</p>
               <p className="text-xs text-white/30 mb-4">{t.competitive.toastSub}</p>
               <div className="space-y-2 text-sm">
-                <p className="text-white/40">&check; {t.competitive.t1}</p>
-                <p className="text-white/40">&cross; {t.competitive.t2}</p>
-                <p className="text-white/40">&cross; {t.competitive.t3}</p>
-                <p className="text-white/40">&cross; {t.competitive.t4}</p>
+                <p className="text-white/40">✓ {t.competitive.t1}</p>
+                <p className="text-white/40">✗ {t.competitive.t2}</p>
+                <p className="text-white/40">✗ {t.competitive.t3}</p>
+                <p className="text-white/40">✗ {t.competitive.t4}</p>
               </div>
             </div>
             <div className="border border-white/10 rounded-2xl p-6 bg-white/[0.03]">
               <p className="text-lg font-bold text-white/60 mb-1">{t.competitive.lightspeed}</p>
               <p className="text-xs text-white/30 mb-4">{t.competitive.lightspeedSub}</p>
               <div className="space-y-2 text-sm">
-                <p className="text-white/40">&cross; {t.competitive.l1}</p>
-                <p className="text-white/40">&cross; {t.competitive.l2}</p>
-                <p className="text-white/40">&cross; {t.competitive.l3}</p>
-                <p className="text-white/40">&cross; {t.competitive.l4}</p>
+                <p className="text-white/40">✗ {t.competitive.l1}</p>
+                <p className="text-white/40">✗ {t.competitive.l2}</p>
+                <p className="text-white/40">✗ {t.competitive.l3}</p>
+                <p className="text-white/40">✗ {t.competitive.l4}</p>
               </div>
             </div>
             <div className="border border-white/10 rounded-2xl p-6 bg-white/[0.03]">
               <p className="text-lg font-bold text-white/60 mb-1">{t.competitive.clover}</p>
               <p className="text-xs text-white/30 mb-4">{t.competitive.cloverSub}</p>
               <div className="space-y-2 text-sm">
-                <p className="text-white/40">&cross; {t.competitive.c1}</p>
-                <p className="text-white/40">&cross; {t.competitive.c2}</p>
-                <p className="text-white/40">&cross; {t.competitive.c3}</p>
-                <p className="text-white/40">&cross; {t.competitive.c4}</p>
+                <p className="text-white/40">✗ {t.competitive.c1}</p>
+                <p className="text-white/40">✗ {t.competitive.c2}</p>
+                <p className="text-white/40">✗ {t.competitive.c3}</p>
+                <p className="text-white/40">✗ {t.competitive.c4}</p>
               </div>
             </div>
           </div>
