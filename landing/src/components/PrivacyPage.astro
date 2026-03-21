@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { useTranslations } from '../i18n';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+const locale = Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
+const p = t.privacy;
+---
+
+<BaseLayout title={p.metaTitle}>
+	<header class="nav">
+		<div class="container nav-inner">
+			<a href={getRelativeLocaleUrl(locale, '')} class="nav-brand">
+				<img src="/nudge-icon.png" alt="" width="32" height="32" />
+				<span>Nudge</span>
+			</a>
+			<div class="nav-actions">
+				<LanguageSwitcher />
+				<a href={getRelativeLocaleUrl(locale, '')} class="back-link">&larr; {t.nav.backToHome}</a>
+			</div>
+		</div>
+	</header>
+
+	<main class="container">
+		<article class="legal">
+			<h1>{p.title}</h1>
+			<p class="updated">{p.updated}</p>
+
+			{('disclaimer' in p) && <p class="disclaimer"><em>{(p as any).disclaimer}</em></p>}
+
+			<p>{p.intro}</p>
+
+			<h2>{p.s1Title}</h2>
+			<p>{p.s1Intro}</p>
+			<ul>
+				{p.s1Items.map((item: { label: string; text: string }) => (
+					<li><strong>{item.label}</strong> {item.text}</li>
+				))}
+			</ul>
+
+			<h2>{p.s2Title}</h2>
+			<ul>
+				{p.s2Items.map((item: string) => <li>{item}</li>)}
+			</ul>
+
+			<h2>{p.s3Title}</h2>
+			<p>{p.s3Text}</p>
+
+			<h2>{p.s4Title}</h2>
+			<p>{p.s4Text}</p>
+			<ul>
+				{p.s4Items.map((item: string) => <li>{item}</li>)}
+			</ul>
+
+			<h2>{p.s5Title}</h2>
+			<p>{p.s5Intro}</p>
+			<ul>
+				{p.s5Items.map((item: { label: string; text: string }) => (
+					<li><strong>{item.label}</strong> {item.text}</li>
+				))}
+			</ul>
+
+			<h2>{p.s6Title}</h2>
+			<p>{p.s6Text}</p>
+
+			<h2>{p.s7Title}</h2>
+			<p>{p.s7Intro}</p>
+			<ul>
+				{p.s7Items.map((item: string) => <li>{item}</li>)}
+			</ul>
+
+			<h2>{p.s8Title}</h2>
+			<p>{p.s8Intro}</p>
+			<ul>
+				{p.s8Items.map((item: string) => <li>{item}</li>)}
+			</ul>
+			<p>{p.s8Ccpa}</p>
+
+			<h2>{p.s9Title}</h2>
+			<p>{p.s9Text}</p>
+
+			<h2>{p.s10Title}</h2>
+			<p>{p.s10Text}</p>
+
+			<h2>{p.s11Title}</h2>
+			<p>{p.s11Text} <strong>enriquefft@404tf.com</strong>.</p>
+		</article>
+	</main>
+
+	<footer class="footer">
+		<div class="container footer-inner">
+			<span>{t.footer.copyright}</span>
+			<nav>
+				<a href={getRelativeLocaleUrl(locale, 'privacy')}>{t.footer.privacy}</a>
+				<a href={getRelativeLocaleUrl(locale, 'eula')}>{t.footer.terms}</a>
+			</nav>
+		</div>
+	</footer>
+</BaseLayout>
+
+<style is:global>
+	:root {
+		--brand: #1B6B4A;
+		--brand-dark: #0F4D35;
+		--brand-surface: #E8F5EE;
+		--surface-1: #FAFBF9;
+		--text-1: #1A2B23;
+		--text-2: #5A6B63;
+		--text-3: #8A9B93;
+		--text-on-brand: #F5FBF8;
+		--border: #E2E8E4;
+	}
+
+	*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+	html { -webkit-font-smoothing: antialiased; }
+
+	body {
+		font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--text-1);
+		background: var(--surface-1);
+	}
+
+	img { display: block; }
+	a { color: inherit; text-decoration: none; }
+
+	.container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+	.nav {
+		padding: 14px 0;
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 48px;
+	}
+	.nav-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 0 24px;
+	}
+	.nav-brand {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-family: 'Instrument Serif', Georgia, serif;
+		font-size: 22px;
+	}
+	.nav-brand img { border-radius: 8px; width: 32px; height: 32px; }
+	.nav-actions {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+	.back-link {
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--text-2);
+		transition: color 200ms ease;
+	}
+	.back-link:hover { color: var(--brand); }
+
+	.legal { padding-bottom: 64px; }
+	.legal h1 {
+		font-family: 'Instrument Serif', Georgia, serif;
+		font-size: 36px;
+		line-height: 1.15;
+		letter-spacing: -0.02em;
+		margin-bottom: 8px;
+	}
+	.updated {
+		color: var(--text-3);
+		font-size: 14px;
+		margin-bottom: 32px;
+	}
+	.disclaimer {
+		background: var(--brand-surface);
+		border-left: 3px solid var(--brand);
+		padding: 12px 16px;
+		margin-bottom: 24px;
+		font-size: 14px;
+		color: var(--text-2);
+	}
+	.legal h2 {
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--text-1);
+		margin-top: 32px;
+		margin-bottom: 12px;
+	}
+	.legal p {
+		color: var(--text-2);
+		margin-bottom: 16px;
+	}
+	.legal ul {
+		color: var(--text-2);
+		margin-bottom: 16px;
+		padding-left: 24px;
+	}
+	.legal li { margin-bottom: 8px; }
+	.legal strong { color: var(--text-1); font-weight: 600; }
+	.legal a { color: var(--brand); text-decoration: underline; }
+
+	.footer {
+		padding: 24px 0;
+		border-top: 1px solid var(--border);
+	}
+	.footer-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 0 24px;
+		font-size: 13px;
+		color: var(--text-3);
+	}
+	.footer-inner nav { display: flex; gap: 20px; }
+	.footer-inner a { transition: color 200ms ease; }
+	.footer-inner a:hover { color: var(--text-1); }
+</style>

@@ -1,0 +1,208 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { useTranslations } from '../i18n';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+const locale = Astro.currentLocale ?? 'en';
+const t = useTranslations(locale);
+const e = t.eula;
+---
+
+<BaseLayout title={e.metaTitle}>
+	<header class="nav">
+		<div class="container nav-inner">
+			<a href={getRelativeLocaleUrl(locale, '')} class="nav-brand">
+				<img src="/nudge-icon.png" alt="" width="32" height="32" />
+				<span>Nudge</span>
+			</a>
+			<div class="nav-actions">
+				<LanguageSwitcher />
+				<a href={getRelativeLocaleUrl(locale, '')} class="back-link">&larr; {t.nav.backToHome}</a>
+			</div>
+		</div>
+	</header>
+
+	<main class="container">
+		<article class="legal">
+			<h1>{e.title}</h1>
+			<p class="updated">{e.updated}</p>
+
+			{('disclaimer' in e) && <p class="disclaimer"><em>{(e as any).disclaimer}</em></p>}
+
+			<p>{e.intro}</p>
+
+			<h2>{e.s1Title}</h2>
+			<p>{e.s1Text}</p>
+
+			<h2>{e.s2Title}</h2>
+			<p>{e.s2Intro}</p>
+			<ul>
+				{e.s2Items.map((item: string) => <li>{item}</li>)}
+			</ul>
+
+			<h2>{e.s3Title}</h2>
+			<p>{e.s3Text}</p>
+
+			<h2>{e.s4Title}</h2>
+			<p>{e.s4Text.replace('{privacyLink}', '')} <a href={getRelativeLocaleUrl(locale, 'privacy')}>{e.s4PrivacyLink}</a>.</p>
+
+			<h2>{e.s5Title}</h2>
+			<p>{e.s5Text}</p>
+
+			<h2>{e.s6Title}</h2>
+			<p>{e.s6Text}</p>
+
+			<h2>{e.s7Title}</h2>
+			<p>{e.s7Text}</p>
+
+			<h2>{e.s8Title}</h2>
+			<p>{e.s8Text}</p>
+
+			<h2>{e.s9Title}</h2>
+			<p>{e.s9Text}</p>
+
+			<h2>{e.s10Title}</h2>
+			<p>{e.s10Text}</p>
+
+			<h2>{e.s11Title}</h2>
+			<p>{e.s11Text}</p>
+
+			<h2>{e.s12Title}</h2>
+			<p>{e.s12Text} <strong>enriquefft@404tf.com</strong>.</p>
+		</article>
+	</main>
+
+	<footer class="footer">
+		<div class="container footer-inner">
+			<span>{t.footer.copyright}</span>
+			<nav>
+				<a href={getRelativeLocaleUrl(locale, 'privacy')}>{t.footer.privacy}</a>
+				<a href={getRelativeLocaleUrl(locale, 'eula')}>{t.footer.terms}</a>
+			</nav>
+		</div>
+	</footer>
+</BaseLayout>
+
+<style is:global>
+	:root {
+		--brand: #1B6B4A;
+		--brand-dark: #0F4D35;
+		--brand-surface: #E8F5EE;
+		--surface-1: #FAFBF9;
+		--text-1: #1A2B23;
+		--text-2: #5A6B63;
+		--text-3: #8A9B93;
+		--text-on-brand: #F5FBF8;
+		--border: #E2E8E4;
+	}
+
+	*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+	html { -webkit-font-smoothing: antialiased; }
+
+	body {
+		font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--text-1);
+		background: var(--surface-1);
+	}
+
+	img { display: block; }
+	a { color: inherit; text-decoration: none; }
+
+	.container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+	.nav {
+		padding: 14px 0;
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 48px;
+	}
+	.nav-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 0 24px;
+	}
+	.nav-brand {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-family: 'Instrument Serif', Georgia, serif;
+		font-size: 22px;
+	}
+	.nav-brand img { border-radius: 8px; width: 32px; height: 32px; }
+	.nav-actions {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+	.back-link {
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--text-2);
+		transition: color 200ms ease;
+	}
+	.back-link:hover { color: var(--brand); }
+
+	.legal { padding-bottom: 64px; }
+	.legal h1 {
+		font-family: 'Instrument Serif', Georgia, serif;
+		font-size: 36px;
+		line-height: 1.15;
+		letter-spacing: -0.02em;
+		margin-bottom: 8px;
+	}
+	.updated {
+		color: var(--text-3);
+		font-size: 14px;
+		margin-bottom: 32px;
+	}
+	.disclaimer {
+		background: var(--brand-surface);
+		border-left: 3px solid var(--brand);
+		padding: 12px 16px;
+		margin-bottom: 24px;
+		font-size: 14px;
+		color: var(--text-2);
+	}
+	.legal h2 {
+		font-size: 18px;
+		font-weight: 600;
+		color: var(--text-1);
+		margin-top: 32px;
+		margin-bottom: 12px;
+	}
+	.legal p {
+		color: var(--text-2);
+		margin-bottom: 16px;
+	}
+	.legal ul {
+		color: var(--text-2);
+		margin-bottom: 16px;
+		padding-left: 24px;
+	}
+	.legal li { margin-bottom: 8px; }
+	.legal strong { color: var(--text-1); font-weight: 600; }
+	.legal a { color: var(--brand); text-decoration: underline; }
+
+	.footer {
+		padding: 24px 0;
+		border-top: 1px solid var(--border);
+	}
+	.footer-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 0 24px;
+		font-size: 13px;
+		color: var(--text-3);
+	}
+	.footer-inner nav { display: flex; gap: 20px; }
+	.footer-inner a { transition: color 200ms ease; }
+	.footer-inner a:hover { color: var(--text-1); }
+</style>

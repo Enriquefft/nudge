@@ -1,0 +1,192 @@
+{
+	"meta": {
+		"title": "Nudge — AI Upsell Assistant for Clover POS",
+		"description": "Nudge suggests add-ons on your Clover POS while your staff takes orders. Average tickets go up 15-30%.",
+		"ogTitle": "Nudge — AI Upsell Assistant for Clover POS",
+		"ogDescription": "Your staff rings up an item. Nudge suggests what goes with it. One tap to add."
+	},
+	"nav": {
+		"skipToContent": "Skip to content",
+		"howItWorks": "How It Works",
+		"features": "Features",
+		"bookDemo": "Book a Demo",
+		"backToHome": "Back to home"
+	},
+	"hero": {
+		"badge": "Coming Soon to Clover App Market",
+		"heading": "Every Order Could Be Worth More",
+		"sub": "Your staff rings up an item. Nudge suggests what goes with it, from your actual menu, in about two seconds. One tap to add it to the order.",
+		"ctaBook": "Book a Demo",
+		"ctaHow": "How it works",
+		"note": "Free 15-min call. See Nudge in action on your menu."
+	},
+	"mockup": {
+		"order": "Order #1847",
+		"table": "Table 4",
+		"item1": "Classic Burger Combo",
+		"price1": "$12.99",
+		"item2": "Iced Tea",
+		"price2": "$3.49",
+		"subtotal": "Subtotal",
+		"subtotalPrice": "$16.48",
+		"suggestedLabel": "Suggested Add-On",
+		"suggestName": "French Fries",
+		"suggestPrice": "$4.99",
+		"suggestReason": "\"Most people add fries with a burger\"",
+		"dismiss": "Not Now",
+		"addToOrder": "+ Add to Order"
+	},
+	"problem": {
+		"heading": "Your Staff Is Leaving Money on the Table",
+		"sub": "Even good employees skip the upsell. They're busy, or they just don't want to sound pushy.",
+		"stat1Num": "55%",
+		"stat1Label": "of orders get no upsell attempt",
+		"stat2Num": "$6K",
+		"stat2Plus": "+",
+		"stat2Label": "monthly revenue missed per location",
+		"stat3Num": "78%",
+		"stat3Label": "AI upsell rate vs 45% for humans"
+	},
+	"how": {
+		"heading": "Three steps. That's it.",
+		"sub": "Nudge sits on top of your existing workflow. Nothing new to learn.",
+		"step1Title": "Staff adds an item",
+		"step1Desc": "Business as usual. Your staff rings up items the way they always have.",
+		"step2Title": "Nudge suggests an add-on",
+		"step2Desc": "AI looks at what's in the order and picks something from your menu that goes with it. Under 2 seconds.",
+		"step3Title": "One tap, done",
+		"step3Desc": "Staff taps once. Item goes in the order. Done."
+	},
+	"features": {
+		"heading": "Built for the Way You Actually Work",
+		"sub": "Not another app your staff ignores. Nudge fits into the moment, not around it.",
+		"f1Title": "Suggestions from your menu",
+		"f1Desc": "Reads the current order and picks something from your actual inventory. Takes about a second.",
+		"f2Title": "One tap to add",
+		"f2Desc": "Tap once, the item goes into the order. That's the whole interaction.",
+		"f3Title": "Stays out of the way",
+		"f3Desc": "Big buttons you can read from a few feet away. Goes away on its own after 15 seconds if nobody taps.",
+		"f4Title": "See what's working",
+		"f4Desc": "How many suggestions got accepted, how much extra revenue came in. Updated daily on the device."
+	},
+	"proof": {
+		"p1Num": "15–30%",
+		"p1Label": "higher average tickets",
+		"p2Num": "<2s",
+		"p2Label": "time to suggest",
+		"p3Num": "Zero",
+		"p3Label": "workflow changes",
+		"p4Num": "$72K+",
+		"p4Label": "potential yearly revenue"
+	},
+	"cta": {
+		"heading": "See It in Action on Your Menu",
+		"sub": "15 minutes. We'll set it up with your menu so you can see it work.",
+		"button": "Book a Demo"
+	},
+	"footer": {
+		"howItWorks": "How It Works",
+		"features": "Features",
+		"privacy": "Privacy",
+		"terms": "Terms",
+		"copyright": "© 2026 Enrique Flores. All rights reserved."
+	},
+	"eula": {
+		"metaTitle": "End User License Agreement — Nudge",
+		"title": "End User License Agreement",
+		"updated": "Last updated: March 20, 2026",
+		"intro": "This End User License Agreement (\"Agreement\") is a legal agreement between you (\"User\") and Enrique Flores (\"Developer\"), operating through 404tf.com, for the use of the Nudge application (\"App\") on Clover POS devices.",
+		"s1Title": "1. License Grant",
+		"s1Text": "The Developer grants you a limited, non-exclusive, non-transferable, revocable license to use the App on Clover POS devices that you own or control, solely for your internal business purposes.",
+		"s2Title": "2. Restrictions",
+		"s2Intro": "You may not:",
+		"s2Items": [
+			"Copy, modify, or distribute the App",
+			"Reverse engineer, decompile, or disassemble the App",
+			"Rent, lease, lend, or sublicense the App",
+			"Use the App for any unlawful purpose",
+			"Remove any proprietary notices from the App"
+		],
+		"s3Title": "3. AI-Generated Suggestions",
+		"s3Text": "The App uses artificial intelligence to generate product suggestions. These suggestions are informational only. The Developer does not guarantee the accuracy, completeness, or suitability of any AI-generated suggestion. You are solely responsible for any actions taken based on these suggestions.",
+		"s4Title": "4. Data Usage",
+		"s4Text": "The App accesses your Clover order and inventory data to provide suggestions. This data is processed in accordance with our {privacyLink}. By using the App, you consent to such data processing.",
+		"s4PrivacyLink": "Privacy Policy",
+		"s5Title": "5. Intellectual Property",
+		"s5Text": "The App and all related intellectual property rights are and remain the property of the Developer. This Agreement does not grant you any ownership rights in the App.",
+		"s6Title": "6. Disclaimer of Warranties",
+		"s6Text": "THE APP IS PROVIDED \"AS IS\" WITHOUT WARRANTY OF ANY KIND. THE DEVELOPER DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.",
+		"s7Title": "7. Limitation of Liability",
+		"s7Text": "IN NO EVENT SHALL THE DEVELOPER BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF THE APP, REGARDLESS OF THE THEORY OF LIABILITY. THE DEVELOPER'S TOTAL LIABILITY SHALL NOT EXCEED THE FEES YOU PAID FOR THE APP IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM.",
+		"s8Title": "8. Termination",
+		"s8Text": "This Agreement is effective until terminated. The Developer may terminate this Agreement at any time if you breach any of its terms. Upon termination, you must cease all use of the App and delete all copies.",
+		"s9Title": "9. Changes to This Agreement",
+		"s9Text": "The Developer reserves the right to modify this Agreement at any time. Continued use of the App after changes constitutes acceptance of the modified Agreement.",
+		"s10Title": "10. Governing Law",
+		"s10Text": "This Agreement shall be governed by and construed in accordance with the laws of Peru, without regard to its conflict of law provisions.",
+		"s11Title": "11. Severability",
+		"s11Text": "If any provision of this Agreement is held to be unenforceable, the remaining provisions shall continue in full force and effect.",
+		"s12Title": "12. Contact",
+		"s12Text": "For questions about this Agreement, contact us at"
+	},
+	"privacy": {
+		"metaTitle": "Privacy Policy — Nudge",
+		"title": "Privacy Policy",
+		"updated": "Last updated: March 20, 2026",
+		"intro": "Enrique Flores (\"we\", \"our\", \"us\"), operating through 404tf.com, develops and operates the Nudge application (\"App\") for Clover POS devices. This Privacy Policy explains how we collect, use, and protect your information.",
+		"s1Title": "1. Information We Collect",
+		"s1Intro": "When you use the App, we access the following data through the Clover platform:",
+		"s1Items": [
+			{ "label": "Order Data:", "text": "Current order line items (product names, quantities, prices) to generate real-time suggestions" },
+			{ "label": "Inventory Data:", "text": "Your product catalog and inventory levels to ensure suggestions reference available items" },
+			{ "label": "Customer Data:", "text": "If available through Clover's customer system, order history associated with returning customers to personalize suggestions. No payment card data or personally identifiable end-customer information is collected." },
+			{ "label": "Usage Statistics:", "text": "Aggregated metrics such as suggestions shown, accepted, and dismissed" }
+		],
+		"s2Title": "2. How We Use Your Information",
+		"s2Items": [
+			"To generate AI-powered upsell and cross-sell suggestions during active orders",
+			"To personalize suggestions based on customer purchase history when available",
+			"To display performance statistics within the App",
+			"To improve the quality and relevance of suggestions over time"
+		],
+		"s3Title": "3. AI Data Processing",
+		"s3Text": "Order context (product names, quantities, and prices from the current order) is sent to Z.AI (Zhipu AI), our third-party AI service provider, to generate suggestions. According to Z.AI's privacy policy, they do not store any content provided through their API — inputs are processed in real time and are not saved on their servers. No personally identifiable customer information (names, emails, phone numbers, or payment data) is transmitted to the AI provider.",
+		"s4Title": "4. Data Storage and Retention",
+		"s4Text": "Usage statistics (suggestion counts, acceptance rates, upsell history) are stored locally on your Clover device using on-device storage (SharedPreferences). We do not maintain a cloud database of your merchant data. Local data persists until you:",
+		"s4Items": [
+			"Clear the App's data through your device settings",
+			"Uninstall the App"
+		],
+		"s5Title": "5. Data Sharing",
+		"s5Intro": "We do not sell, trade, or rent your data to third parties. Data is shared only in the following cases:",
+		"s5Items": [
+			{ "label": "Z.AI (Zhipu AI):", "text": "Order context is sent solely to generate suggestions, with no data retained by the provider" },
+			{ "label": "Legal obligations:", "text": "When required by law, regulation, or legal process" },
+			{ "label": "Safety:", "text": "To protect the rights or safety of users" }
+		],
+		"s6Title": "6. International Data Transfers",
+		"s6Text": "Order context sent to Z.AI may be processed on servers located outside your country of residence, including in China. By using the App, you consent to this transfer. All transmissions are encrypted via HTTPS.",
+		"s7Title": "7. Data Security",
+		"s7Intro": "We implement reasonable technical measures to protect your data, including:",
+		"s7Items": [
+			"HTTPS encryption for all API communications",
+			"No cloud storage of merchant data — statistics remain on-device",
+			"Leveraging the Clover platform's built-in authentication and security model"
+		],
+		"s8Title": "8. Your Rights",
+		"s8Intro": "You may:",
+		"s8Items": [
+			"Uninstall the App at any time, which stops all data access and removes local data",
+			"Clear local statistics by clearing the App's data in device settings",
+			"Contact us to request information about how your data is processed",
+			"Request deletion of any data we may hold by emailing us"
+		],
+		"s8Ccpa": "If you are a California resident, you have the right to know what personal information is collected and to request its deletion under the CCPA. We do not sell personal information. To exercise your rights, contact us at the email below.",
+		"s9Title": "9. Children's Privacy",
+		"s9Text": "The App is designed for business use on Clover POS devices and is not directed at individuals under the age of 18.",
+		"s10Title": "10. Changes to This Policy",
+		"s10Text": "We may update this Privacy Policy from time to time. Changes will be reflected by the \"Last updated\" date above. Continued use of the App after changes constitutes acceptance.",
+		"s11Title": "11. Contact Us",
+		"s11Text": "For questions about this Privacy Policy, contact us at"
+	}
+}

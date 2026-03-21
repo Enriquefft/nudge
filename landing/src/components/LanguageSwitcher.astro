@@ -1,0 +1,36 @@
+---
+import { getAlternateLocale, getLocaleLabel } from '../i18n';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+const locale = Astro.currentLocale ?? 'en';
+const altLocale = getAlternateLocale(locale);
+const altLabel = getLocaleLabel(altLocale);
+
+const pathname = Astro.url.pathname;
+const basePath = pathname.replace(/^\/(es)\//, '/').replace(/^\/(es)$/, '/');
+const altHref = getRelativeLocaleUrl(altLocale, basePath === '/' ? '' : basePath);
+---
+
+<a href={altHref} class="lang-switch" aria-label={`Switch to ${altLabel}`}>
+	<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+		<circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/>
+		<path d="M2 8h12M8 1.5c-1.5 2-2.2 4-2.2 6.5s.7 4.5 2.2 6.5M8 1.5c1.5 2 2.2 4 2.2 6.5s-.7 4.5-2.2 6.5" stroke="currentColor" stroke-width="1.2"/>
+	</svg>
+	{altLabel}
+</a>
+
+<style>
+	.lang-switch {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--text-2);
+		transition: color 200ms ease;
+		text-decoration: none;
+	}
+	.lang-switch:hover {
+		color: var(--brand);
+	}
+</style>

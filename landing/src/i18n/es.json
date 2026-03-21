@@ -1,0 +1,194 @@
+{
+	"meta": {
+		"title": "Nudge — Asistente de ventas con IA para Clover POS",
+		"description": "Nudge sugiere complementos en tu Clover POS mientras tu equipo toma pedidos. El ticket promedio sube 15-30%.",
+		"ogTitle": "Nudge — Asistente de ventas con IA para Clover POS",
+		"ogDescription": "Tu equipo cobra un producto. Nudge sugiere qué va bien con él. Un toque para agregarlo."
+	},
+	"nav": {
+		"skipToContent": "Ir al contenido",
+		"howItWorks": "Cómo funciona",
+		"features": "Funciones",
+		"bookDemo": "Agendar demo",
+		"backToHome": "Volver al inicio"
+	},
+	"hero": {
+		"badge": "Próximamente en Clover App Market",
+		"heading": "Cada pedido podría valer más",
+		"sub": "Tu equipo cobra un producto. Nudge sugiere qué va bien con él, directo de tu menú, en unos dos segundos. Un toque para agregarlo al pedido.",
+		"ctaBook": "Agendar demo",
+		"ctaHow": "Cómo funciona",
+		"note": "Llamada gratis de 15 min. Mira Nudge en acción con tu menú."
+	},
+	"mockup": {
+		"order": "Pedido #1847",
+		"table": "Mesa 4",
+		"item1": "Combo Hamburguesa Clásica",
+		"price1": "$12.99",
+		"item2": "Té Helado",
+		"price2": "$3.49",
+		"subtotal": "Subtotal",
+		"subtotalPrice": "$16.48",
+		"suggestedLabel": "Complemento sugerido",
+		"suggestName": "Papas Fritas",
+		"suggestPrice": "$4.99",
+		"suggestReason": "\"La gente siempre pide papas con hamburguesa\"",
+		"dismiss": "Ahora no",
+		"addToOrder": "+ Agregar al pedido"
+	},
+	"problem": {
+		"heading": "Tu equipo está dejando dinero sobre la mesa",
+		"sub": "Hasta los buenos empleados se saltan la venta extra. Están ocupados, o no quieren sonar insistentes.",
+		"stat1Num": "55%",
+		"stat1Label": "de los pedidos no reciben intento de venta extra",
+		"stat2Num": "$6K",
+		"stat2Plus": "+",
+		"stat2Label": "de ingresos mensuales perdidos por local",
+		"stat3Num": "78%",
+		"stat3Label": "tasa de venta con IA vs 45% con personas"
+	},
+	"how": {
+		"heading": "Tres pasos. Nada más.",
+		"sub": "Nudge se monta sobre tu forma de trabajar. No hay nada nuevo que aprender.",
+		"step1Title": "El equipo agrega un producto",
+		"step1Desc": "Lo de siempre. Tu equipo cobra como lo ha hecho toda la vida.",
+		"step2Title": "Nudge sugiere un complemento",
+		"step2Desc": "La IA revisa el pedido y elige algo de tu menú que lo complementa. Menos de 2 segundos.",
+		"step3Title": "Un toque y listo",
+		"step3Desc": "El equipo toca una vez. El producto se agrega al pedido. Listo."
+	},
+	"features": {
+		"heading": "Hecho para cómo trabajas de verdad",
+		"sub": "No es otra app que tu equipo ignora. Nudge aparece en el momento justo, no a destiempo.",
+		"f1Title": "Sugerencias de tu menú",
+		"f1Desc": "Lee el pedido actual y elige algo de tu inventario real. Toma como un segundo.",
+		"f2Title": "Un toque para agregar",
+		"f2Desc": "Toca una vez, el producto se agrega al pedido. Esa es toda la interacción.",
+		"f3Title": "No estorba",
+		"f3Desc": "Botones grandes que se leen a distancia. Desaparece solo después de 15 segundos si nadie lo toca.",
+		"f4Title": "Ve qué está funcionando",
+		"f4Desc": "Cuántas sugerencias se aceptaron, cuánto ingreso extra generaron. Se actualiza a diario en el dispositivo."
+	},
+	"proof": {
+		"p1Num": "15–30%",
+		"p1Label": "más en ticket promedio",
+		"p2Num": "<2s",
+		"p2Label": "tiempo de sugerencia",
+		"p3Num": "Cero",
+		"p3Label": "cambios en tu rutina",
+		"p4Num": "$72K+",
+		"p4Label": "ingresos anuales potenciales"
+	},
+	"cta": {
+		"heading": "Míralo en acción con tu menú",
+		"sub": "15 minutos. Lo configuramos con tu menú para que lo veas funcionar.",
+		"button": "Agendar demo"
+	},
+	"footer": {
+		"howItWorks": "Cómo funciona",
+		"features": "Funciones",
+		"privacy": "Privacidad",
+		"terms": "Términos",
+		"copyright": "© 2026 Enrique Flores. Todos los derechos reservados."
+	},
+	"eula": {
+		"metaTitle": "Acuerdo de licencia de usuario final — Nudge",
+		"title": "Acuerdo de licencia de usuario final",
+		"updated": "Última actualización: 20 de marzo de 2026",
+		"disclaimer": "Esta es una traducción de cortesía. El documento legalmente vinculante es la versión en inglés.",
+		"intro": "Este Acuerdo de Licencia de Usuario Final (\"Acuerdo\") es un acuerdo legal entre usted (\"Usuario\") y Enrique Flores (\"Desarrollador\"), que opera a través de 404tf.com, para el uso de la aplicación Nudge (\"App\") en dispositivos Clover POS.",
+		"s1Title": "1. Otorgamiento de licencia",
+		"s1Text": "El Desarrollador le otorga una licencia limitada, no exclusiva, intransferible y revocable para usar la App en dispositivos Clover POS que usted posea o controle, únicamente para sus fines comerciales internos.",
+		"s2Title": "2. Restricciones",
+		"s2Intro": "Usted no podrá:",
+		"s2Items": [
+			"Copiar, modificar o distribuir la App",
+			"Realizar ingeniería inversa, descompilar o desensamblar la App",
+			"Alquilar, arrendar, prestar o sublicenciar la App",
+			"Usar la App para cualquier propósito ilegal",
+			"Remover cualquier aviso de propiedad de la App"
+		],
+		"s3Title": "3. Sugerencias generadas por IA",
+		"s3Text": "La App utiliza inteligencia artificial para generar sugerencias de productos. Estas sugerencias son solo informativas. El Desarrollador no garantiza la exactitud, integridad o idoneidad de ninguna sugerencia generada por IA. Usted es el único responsable de cualquier acción tomada con base en estas sugerencias.",
+		"s4Title": "4. Uso de datos",
+		"s4Text": "La App accede a los datos de pedidos e inventario de Clover para proporcionar sugerencias. Estos datos se procesan de acuerdo con nuestra {privacyLink}. Al usar la App, usted consiente dicho procesamiento de datos.",
+		"s4PrivacyLink": "Política de Privacidad",
+		"s5Title": "5. Propiedad intelectual",
+		"s5Text": "La App y todos los derechos de propiedad intelectual relacionados son y siguen siendo propiedad del Desarrollador. Este Acuerdo no le otorga ningún derecho de propiedad sobre la App.",
+		"s6Title": "6. Renuncia de garantías",
+		"s6Text": "LA APP SE PROPORCIONA \"TAL CUAL\" SIN GARANTÍA DE NINGÚN TIPO. EL DESARROLLADOR RENUNCIA A TODAS LAS GARANTÍAS, EXPRESAS O IMPLÍCITAS, INCLUYENDO PERO NO LIMITÁNDOSE A GARANTÍAS DE COMERCIABILIDAD, IDONEIDAD PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN.",
+		"s7Title": "7. Limitación de responsabilidad",
+		"s7Text": "EN NINGÚN CASO EL DESARROLLADOR SERÁ RESPONSABLE POR DAÑOS INDIRECTOS, INCIDENTALES, ESPECIALES, CONSECUENTES O PUNITIVOS QUE SURJAN DE O ESTÉN RELACIONADOS CON SU USO DE LA APP, INDEPENDIENTEMENTE DE LA TEORÍA DE RESPONSABILIDAD. LA RESPONSABILIDAD TOTAL DEL DESARROLLADOR NO EXCEDERÁ LAS TARIFAS QUE USTED PAGÓ POR LA APP EN LOS DOCE (12) MESES ANTERIORES A LA RECLAMACIÓN.",
+		"s8Title": "8. Terminación",
+		"s8Text": "Este Acuerdo es efectivo hasta su terminación. El Desarrollador puede terminar este Acuerdo en cualquier momento si usted incumple cualquiera de sus términos. Al terminar, usted debe cesar todo uso de la App y eliminar todas las copias.",
+		"s9Title": "9. Cambios a este acuerdo",
+		"s9Text": "El Desarrollador se reserva el derecho de modificar este Acuerdo en cualquier momento. El uso continuado de la App después de los cambios constituye la aceptación del Acuerdo modificado.",
+		"s10Title": "10. Ley aplicable",
+		"s10Text": "Este Acuerdo se regirá e interpretará de acuerdo con las leyes de Perú, sin tener en cuenta sus disposiciones sobre conflicto de leyes.",
+		"s11Title": "11. Divisibilidad",
+		"s11Text": "Si alguna disposición de este Acuerdo se considera inaplicable, las disposiciones restantes continuarán en pleno vigor y efecto.",
+		"s12Title": "12. Contacto",
+		"s12Text": "Para preguntas sobre este Acuerdo, contáctenos en"
+	},
+	"privacy": {
+		"metaTitle": "Política de privacidad — Nudge",
+		"title": "Política de privacidad",
+		"updated": "Última actualización: 20 de marzo de 2026",
+		"disclaimer": "Esta es una traducción de cortesía. El documento legalmente vinculante es la versión en inglés.",
+		"intro": "Enrique Flores (\"nosotros\", \"nuestro\"), operando a través de 404tf.com, desarrolla y opera la aplicación Nudge (\"App\") para dispositivos Clover POS. Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos su información.",
+		"s1Title": "1. Información que recopilamos",
+		"s1Intro": "Cuando usa la App, accedemos a los siguientes datos a través de la plataforma Clover:",
+		"s1Items": [
+			{ "label": "Datos de pedidos:", "text": "Líneas de pedido actuales (nombres de productos, cantidades, precios) para generar sugerencias en tiempo real" },
+			{ "label": "Datos de inventario:", "text": "Su catálogo de productos y niveles de inventario para asegurar que las sugerencias hagan referencia a productos disponibles" },
+			{ "label": "Datos de clientes:", "text": "Si está disponible a través del sistema de clientes de Clover, historial de pedidos asociado a clientes recurrentes para personalizar sugerencias. No se recopilan datos de tarjetas de pago ni información de identificación personal del cliente final." },
+			{ "label": "Estadísticas de uso:", "text": "Métricas agregadas como sugerencias mostradas, aceptadas y rechazadas" }
+		],
+		"s2Title": "2. Cómo usamos su información",
+		"s2Items": [
+			"Para generar sugerencias de venta adicional y venta cruzada con IA durante pedidos activos",
+			"Para personalizar sugerencias con base en el historial de compras del cliente cuando esté disponible",
+			"Para mostrar estadísticas de rendimiento dentro de la App",
+			"Para mejorar la calidad y relevancia de las sugerencias con el tiempo"
+		],
+		"s3Title": "3. Procesamiento de datos por IA",
+		"s3Text": "El contexto del pedido (nombres de productos, cantidades y precios del pedido actual) se envía a Z.AI (Zhipu AI), nuestro proveedor de servicios de IA externo, para generar sugerencias. Según la política de privacidad de Z.AI, no almacenan ningún contenido proporcionado a través de su API: las entradas se procesan en tiempo real y no se guardan en sus servidores. No se transmite información de identificación personal del cliente (nombres, correos, números de teléfono o datos de pago) al proveedor de IA.",
+		"s4Title": "4. Almacenamiento y retención de datos",
+		"s4Text": "Las estadísticas de uso (conteos de sugerencias, tasas de aceptación, historial de ventas adicionales) se almacenan localmente en su dispositivo Clover usando almacenamiento en el dispositivo (SharedPreferences). No mantenemos una base de datos en la nube de los datos de su comercio. Los datos locales persisten hasta que usted:",
+		"s4Items": [
+			"Borre los datos de la App a través de la configuración del dispositivo",
+			"Desinstale la App"
+		],
+		"s5Title": "5. Compartir datos",
+		"s5Intro": "No vendemos, comerciamos ni alquilamos sus datos a terceros. Los datos se comparten solo en los siguientes casos:",
+		"s5Items": [
+			{ "label": "Z.AI (Zhipu AI):", "text": "El contexto del pedido se envía únicamente para generar sugerencias, sin que el proveedor retenga datos" },
+			{ "label": "Obligaciones legales:", "text": "Cuando lo requiera la ley, regulación o proceso legal" },
+			{ "label": "Seguridad:", "text": "Para proteger los derechos o la seguridad de los usuarios" }
+		],
+		"s6Title": "6. Transferencias internacionales de datos",
+		"s6Text": "El contexto del pedido enviado a Z.AI puede ser procesado en servidores ubicados fuera de su país de residencia, incluyendo en China. Al usar la App, usted consiente esta transferencia. Todas las transmisiones están cifradas vía HTTPS.",
+		"s7Title": "7. Seguridad de datos",
+		"s7Intro": "Implementamos medidas técnicas razonables para proteger sus datos, incluyendo:",
+		"s7Items": [
+			"Cifrado HTTPS para todas las comunicaciones de API",
+			"Sin almacenamiento en la nube de datos del comerciante: las estadísticas permanecen en el dispositivo",
+			"Uso del modelo de autenticación y seguridad integrado de la plataforma Clover"
+		],
+		"s8Title": "8. Sus derechos",
+		"s8Intro": "Usted puede:",
+		"s8Items": [
+			"Desinstalar la App en cualquier momento, lo que detiene todo acceso a datos y elimina los datos locales",
+			"Borrar las estadísticas locales limpiando los datos de la App en la configuración del dispositivo",
+			"Contactarnos para solicitar información sobre cómo se procesan sus datos",
+			"Solicitar la eliminación de cualquier dato que tengamos enviando un correo"
+		],
+		"s8Ccpa": "Si usted es residente de California, tiene derecho a saber qué información personal se recopila y a solicitar su eliminación bajo la CCPA. No vendemos información personal. Para ejercer sus derechos, contáctenos al correo a continuación.",
+		"s9Title": "9. Privacidad de menores",
+		"s9Text": "La App está diseñada para uso comercial en dispositivos Clover POS y no está dirigida a personas menores de 18 años.",
+		"s10Title": "10. Cambios a esta política",
+		"s10Text": "Podemos actualizar esta Política de Privacidad periódicamente. Los cambios se reflejarán en la fecha de \"Última actualización\" anterior. El uso continuado de la App después de los cambios constituye aceptación.",
+		"s11Title": "11. Contáctenos",
+		"s11Text": "Para preguntas sobre esta Política de Privacidad, contáctenos en"
+	}
+}
