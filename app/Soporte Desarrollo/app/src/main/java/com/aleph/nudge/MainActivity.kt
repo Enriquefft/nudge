@@ -31,7 +31,6 @@ import com.clover.sdk.util.CloverAccount
 import com.clover.sdk.v3.order.Order
 import com.clover.sdk.v3.order.OrderConnector
 import androidx.core.content.ContextCompat
-import com.google.android.material.snackbar.Snackbar
 
 @Suppress("DEPRECATION")
 class MainActivity : android.app.Activity() {
@@ -50,6 +49,8 @@ class MainActivity : android.app.Activity() {
     private var tvOrderTotal: TextView? = null
     private var orderDivider: View? = null
     private var orderTotalRow: View? = null
+    private var idleState: View? = null
+    private var contentScroll: View? = null
 
     // Tracks (name, priceInCents) for display with prices and running total
     private val orderItems = mutableListOf<Pair<String, Long>>()
@@ -91,6 +92,8 @@ class MainActivity : android.app.Activity() {
         tvOrderTotal = findViewById(R.id.tv_order_total)
         orderDivider = findViewById(R.id.order_divider)
         orderTotalRow = findViewById(R.id.order_total_row)
+        idleState = findViewById(R.id.idle_state)
+        contentScroll = findViewById(R.id.content_scroll)
 
         val app = application as NudgeApplication
         inventoryService = app.inventoryService
@@ -162,14 +165,7 @@ class MainActivity : android.app.Activity() {
             orderItems.add(name to price)
         }
 
-        val rootView = findViewById<View>(android.R.id.content)
-        Snackbar.make(rootView, getString(R.string.item_added, scenario.newItemName), Snackbar.LENGTH_SHORT)
-            .setBackgroundTint(ContextCompat.getColor(this, R.color.brand_primary))
-            .setTextColor(ContextCompat.getColor(this, R.color.text_on_brand))
-            .show()
-
         btnAddItem?.isEnabled = false
-        tvStatus.text = getString(R.string.ai_analyzing)
         progressLoading.visibility = View.VISIBLE
 
         val historySummary = upsellHistoryManager.getHistorySummary(scenario.currentOrderItems)
@@ -185,7 +181,6 @@ class MainActivity : android.app.Activity() {
         ) { suggestion ->
             if (isActivityDestroyed) return@getSuggestion
             progressLoading.visibility = View.GONE
-            tvStatus.text = getString(R.string.standalone_mode_status)
             val finalSuggestion = suggestion
                 ?: scenarios[currentScenarioIndex].fallbackSuggestion
                 ?: run {
@@ -333,13 +328,6 @@ class MainActivity : android.app.Activity() {
         orderItems.add(item.name to item.price)
         updateOrderItemsDisplay(orderItems)
 
-        val rootView = findViewById<View>(android.R.id.content)
-        Snackbar.make(rootView, getString(R.string.item_added, item.name), Snackbar.LENGTH_SHORT)
-            .setBackgroundTint(ContextCompat.getColor(this, R.color.brand_primary))
-            .setTextColor(ContextCompat.getColor(this, R.color.text_on_brand))
-            .show()
-
-        tvStatus.text = getString(R.string.ai_analyzing)
         progressLoading.visibility = View.VISIBLE
         setMenuBarEnabled(false)
 
@@ -352,7 +340,6 @@ class MainActivity : android.app.Activity() {
         ) { suggestion ->
             if (isActivityDestroyed) return@getSuggestion
             progressLoading.visibility = View.GONE
-            tvStatus.text = getString(R.string.pilot_mode_ready)
             setMenuBarEnabled(true)
 
             if (suggestion == null) {
@@ -503,7 +490,6 @@ class MainActivity : android.app.Activity() {
             orderItems.add(name to price)
         }
         updateOrderItemsDisplay(orderItems)
-        tvStatus.text = getString(R.string.ai_analyzing)
         progressLoading.visibility = View.VISIBLE
 
         // Cancel any pending debounced suggestion request
@@ -522,7 +508,6 @@ class MainActivity : android.app.Activity() {
         aiService.getSuggestion(currentItemNames, upsellHistory = historySummary, customerContext = customerPrompt) { suggestion ->
             if (isActivityDestroyed) return@getSuggestion
             progressLoading.visibility = View.GONE
-            tvStatus.text = getString(R.string.ready_message)
             if (suggestion != null) {
                 // Check if suggested item is already in the current order
                 val isAlreadyInOrder = currentItemNames.any {
@@ -579,8 +564,10 @@ class MainActivity : android.app.Activity() {
             orderSection?.visibility = View.GONE
             orderDivider?.visibility = View.GONE
             orderTotalRow?.visibility = View.GONE
+            idleState?.visibility = View.VISIBLE
             return
         }
+        idleState?.visibility = View.GONE
         orderSection?.visibility = View.VISIBLE
         orderItemsList?.removeAllViews()
 

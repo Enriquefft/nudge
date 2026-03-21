@@ -1,210 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/surface_primary">
 
-    <!-- Main content area -->
+    <!-- ======== TOOLBAR ======== -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/brand_primary"
+        android:elevation="@dimen/elevation_card"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/space_md"
+        android:paddingEnd="@dimen/space_md"
+        android:orientation="horizontal">
 
-        <!-- Toolbar -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height"
-            android:background="@color/brand_primary"
-            android:elevation="@dimen/elevation_card"
-            android:gravity="center_vertical"
-            android:paddingStart="@dimen/space_md"
-            android:paddingEnd="@dimen/space_md"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/app_name"
-                android:textColor="@color/text_on_brand"
-                android:textSize="@dimen/text_subheading"
-                android:fontFamily="sans-serif-medium" />
-
-            <ImageButton
-                android:id="@+id/btn_stats"
-                android:layout_width="@dimen/touch_target_min"
-                android:layout_height="@dimen/touch_target_min"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_menu_recent_history"
-                app:tint="@color/text_on_brand"
-                android:contentDescription="@string/menu_stats" />
-
-        </LinearLayout>
-
-        <!-- Status area -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="@dimen/space_xl">
+            android:text="@string/app_name"
+            android:textColor="@color/text_on_brand"
+            android:textSize="@dimen/text_subheading"
+            android:fontFamily="sans-serif-medium" />
 
-            <ImageView
-                android:id="@+id/iv_icon"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:src="@drawable/ic_nudge_icon"
-                android:layout_marginBottom="@dimen/space_lg"
-                android:alpha="0.5" />
+        <ImageButton
+            android:id="@+id/btn_stats"
+            android:layout_width="@dimen/touch_target_min"
+            android:layout_height="@dimen/touch_target_min"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_recent_history"
+            app:tint="@color/text_on_brand"
+            android:contentDescription="@string/menu_stats" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
+    <!-- ======== MAIN CONTENT (scrollable, fills available space) ======== -->
+    <ScrollView
+        android:id="@+id/content_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- IDLE STATE: icon + status text, shown when no order items -->
+            <LinearLayout
+                android:id="@+id/idle_state"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/loading_menu"
-                android:textSize="@dimen/text_body"
-                android:textColor="@color/text_secondary"
-                android:gravity="center" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/space_3xl"
+                android:paddingBottom="@dimen/space_xl"
+                android:paddingHorizontal="@dimen/space_xl">
 
-            <Button
-                android:id="@+id/btn_retry"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/iv_icon"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:src="@drawable/ic_nudge_icon"
+                    android:layout_marginBottom="@dimen/space_md"
+                    android:alpha="0.5" />
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loading_menu"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="@color/text_secondary"
+                    android:gravity="center" />
+
+                <Button
+                    android:id="@+id/btn_retry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:text="@string/retry_load"
+                    android:visibility="gone"
+                    android:background="@drawable/btn_primary_bg"
+                    android:textColor="@color/text_on_brand"
+                    android:paddingHorizontal="@dimen/space_lg"
+                    android:paddingVertical="@dimen/space_sm" />
+
+                <TextView
+                    android:id="@+id/tv_suggestion_subtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="@string/suggestion_subtext"
+                    android:textSize="@dimen/text_secondary_size"
+                    android:textColor="@color/text_tertiary"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <!-- ORDER SECTION: shown when order has items -->
+            <LinearLayout
+                android:id="@+id/order_section"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/retry_load"
+                android:orientation="vertical"
                 android:visibility="gone"
-                android:background="@drawable/btn_primary_bg"
-                android:textColor="@color/text_on_brand"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="12dp" />
+                android:paddingHorizontal="@dimen/space_md"
+                android:paddingTop="@dimen/space_md"
+                android:paddingBottom="@dimen/space_sm">
 
-            <TextView
-                android:id="@+id/tv_suggestion_subtext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_sm"
-                android:text="@string/suggestion_subtext"
-                android:textSize="@dimen/text_secondary_size"
-                android:textColor="@color/text_tertiary"
-                android:gravity="center" />
+                <TextView
+                    android:id="@+id/tv_order_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/current_order"
+                    android:textSize="@dimen/text_secondary_size"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_secondary" />
 
+                <LinearLayout
+                    android:id="@+id/order_items_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/space_xs" />
+
+                <View
+                    android:id="@+id/order_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:background="@color/border_subtle"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/order_total_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/space_sm"
+                    android:paddingBottom="@dimen/space_xs"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/order_total"
+                        android:textSize="@dimen/text_body"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/tv_order_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_body"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="monospace" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- STATS SUMMARY: inline, below order -->
             <TextView
                 android:id="@+id/tv_stats_summary"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_md"
+                android:paddingHorizontal="@dimen/space_md"
+                android:paddingVertical="@dimen/space_sm"
                 android:textSize="@dimen/text_secondary_size"
                 android:textColor="@color/text_tertiary"
                 android:gravity="center"
                 android:visibility="gone" />
 
         </LinearLayout>
+    </ScrollView>
 
-        <!-- Current Order Section -->
-        <LinearLayout
-            android:id="@+id/order_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:paddingHorizontal="@dimen/space_md"
-            android:paddingBottom="@dimen/space_sm"
-            android:layout_marginTop="@dimen/space_sm">
-
-            <TextView
-                android:id="@+id/tv_order_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/current_order"
-                android:textSize="@dimen/text_secondary_size"
-                android:textStyle="bold"
-                android:textColor="@color/text_secondary" />
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:layout_marginTop="@dimen/space_xs"
-                android:fillViewport="false">
-
-                <LinearLayout
-                    android:id="@+id/order_items_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-
-            </ScrollView>
-
-            <!-- Divider + Total -->
-            <View
-                android:id="@+id/order_divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/space_xs"
-                android:background="@color/border_subtle"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/order_total_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/space_xs"
-                android:paddingBottom="@dimen/space_xs"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/order_total"
-                    android:textSize="@dimen/text_secondary_size"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary" />
-
-                <TextView
-                    android:id="@+id/tv_order_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_secondary_size"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:fontFamily="monospace" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- Demo add-item button (hidden by default, shown in standalone mode) -->
-    <Button
-        android:id="@+id/btn_demo_add"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/button_height"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/space_md"
-        android:layout_marginBottom="100dp"
-        android:background="@drawable/btn_primary_bg"
-        android:text="+"
-        android:textSize="@dimen/text_secondary_size"
-        android:textColor="@color/text_on_brand"
-        android:textAllCaps="false"
-        android:elevation="6dp"
-        android:gravity="center"
-        android:paddingHorizontal="@dimen/space_lg"
-        android:minWidth="@dimen/button_min_width"
+    <!-- ======== LOADING INDICATOR (thin horizontal bar) ======== -->
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/brand_primary"
         android:visibility="gone" />
 
-    <!-- Scrollable menu items bar (pilot mode) -->
+    <!-- ======== SUGGESTION CARD SLOT (inline, not overlay) ======== -->
+    <FrameLayout
+        android:id="@+id/suggestion_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- ======== BOTTOM ACTION BAR ======== -->
+
+    <!-- Demo mode: full-width "Ring up: X" button -->
+    <Button
+        android:id="@+id/btn_demo_add"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginHorizontal="@dimen/space_md"
+        android:layout_marginBottom="@dimen/space_md"
+        android:background="@drawable/btn_primary_bg"
+        android:text="+"
+        android:textSize="@dimen/text_body"
+        android:textColor="@color/text_on_brand"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:visibility="gone" />
+
+    <!-- Pilot mode: scrollable menu items -->
     <HorizontalScrollView
         android:id="@+id/menu_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="16dp"
         android:scrollbars="none"
+        android:paddingBottom="@dimen/space_sm"
         android:visibility="gone">
 
         <LinearLayout
@@ -212,25 +226,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="@dimen/space_md"
             android:gravity="center_vertical" />
     </HorizontalScrollView>
 
-    <!-- Loading spinner while AI thinks -->
-    <ProgressBar
-        android:id="@+id/progress_loading"
-        style="@android:style/Widget.ProgressBar"
-        android:layout_width="@dimen/space_xl"
-        android:layout_height="@dimen/space_xl"
-        android:layout_gravity="center"
-        android:indeterminateTint="@color/brand_primary"
-        android:visibility="gone" />
-
-    <!-- Suggestion card overlay container -->
-    <FrameLayout
-        android:id="@+id/suggestion_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
-
-</FrameLayout>
+</LinearLayout>
