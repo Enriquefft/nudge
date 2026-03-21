@@ -49,7 +49,7 @@ class NudgeApplication : MultiDexApplication() {
 
         appMode = when {
             BuildConfig.IS_DEMO -> AppMode.DEMO
-            isCloverDevice() -> AppMode.CLOVER
+            BuildConfig.IS_CLOVER_BUILD -> AppMode.CLOVER
             else -> AppMode.PILOT
         }
         Log.d("Nudge", "NudgeApplication: appMode=$appMode")

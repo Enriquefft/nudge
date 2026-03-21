@@ -56,15 +56,22 @@ android {
     flavorDimensions += "mode"
 
     productFlavors {
-        create("production") {
+        create("clover") {
             dimension = "mode"
-            // Default applicationId, no suffix
             buildConfigField("Boolean", "IS_DEMO", "false")
+            buildConfigField("Boolean", "IS_CLOVER_BUILD", "true")
+        }
+        create("pilot") {
+            dimension = "mode"
+            applicationIdSuffix = ".pilot"
+            buildConfigField("Boolean", "IS_DEMO", "false")
+            buildConfigField("Boolean", "IS_CLOVER_BUILD", "false")
         }
         create("demo") {
             dimension = "mode"
             applicationIdSuffix = ".demo"
             buildConfigField("Boolean", "IS_DEMO", "true")
+            buildConfigField("Boolean", "IS_CLOVER_BUILD", "false")
         }
     }
 
