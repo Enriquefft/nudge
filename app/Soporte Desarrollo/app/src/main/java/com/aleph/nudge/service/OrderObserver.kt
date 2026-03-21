@@ -5,6 +5,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.clover.sdk.util.CloverAccount
+import com.clover.sdk.v3.base.Reference
+import com.clover.sdk.v3.order.LineItem
 import com.clover.sdk.v3.order.OrderConnector
 import com.clover.sdk.v3.order.OrderV31Connector
 import java.util.concurrent.atomic.AtomicBoolean
@@ -93,7 +95,10 @@ class OrderObserver(
                     return@Thread
                 }
 
-                connector.addLineItem(orderId, itemId, null, null)
+                val lineItem = LineItem()
+                lineItem.item = Reference()
+                lineItem.item.id = itemId
+                connector.addCustomLineItem(orderId, lineItem, false)
                 Log.d(TAG, "OrderObserver: added item $itemId to order $orderId")
                 mainHandler.post { callback(true) }
 

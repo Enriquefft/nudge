@@ -111,9 +111,9 @@ class MainActivity : android.app.Activity() {
         updateStatsSummary()
 
         when (app.appMode) {
-            NudgeApplication.AppMode.DEMO -> setupDemoMode()
-            NudgeApplication.AppMode.PILOT -> setupPilotMode()
-            NudgeApplication.AppMode.CLOVER -> setupCloverMode()
+            AppMode.DEMO -> setupDemoMode()
+            AppMode.PILOT -> setupPilotMode()
+            AppMode.CLOVER -> setupCloverMode()
         }
     }
 
