@@ -1,28 +1,57 @@
+# Secrets & env
 .env
 .env.*
 *.local.json
-.idea/
-__MACOSX/
-hs_err_pid*.log
-*.jks
-node_modules/
-.vercel/
-
-# Build outputs
-*.apk
-*.aab
 
 # Android
 local.properties
 **/local.properties
+*.apk
+*.aab
+*.jks
+.gradle/
+**/build/
+!**/src/**/build/
 
 # Go
 backend/nudge-api
 
+# Node
+node_modules/
+dist/
+
+# Astro
+.astro/
+
+# Nix / direnv
+.direnv/
+result
+
 # IDE
+.idea/
 *.iml
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
+__MACOSX/
+Thumbs.db
 
-# Env
+# Java
+hs_err_pid*.log
+
+# Vercel
+.vercel/
+
+# Deck build artifacts
+deck/deck.pdf
+deck/deck.pptx
+
+# Video working files
+video/output/
+video/.work/
+
+# Claude agent state
+.agents/
