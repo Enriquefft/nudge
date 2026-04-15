@@ -1,0 +1,9 @@
+# Intermediate build artifacts
+.work/
+
+# Large raw/output files (tracked separately or via LFS)
+raw/*.mp4
+raw/*.m4a
+raw/*.mp3
+output/*.mp4
+assets/*.mp3

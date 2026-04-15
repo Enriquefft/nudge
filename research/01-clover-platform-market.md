@@ -57,6 +57,15 @@
 5. **New Products:** INDX (real-time settlement), Unknown Shopper (in-store analytics), FIUSD (stablecoin)
 6. **"Project Elevate"** — CEO Mike Lyons simplifying the business, betting on AI
 
+## Peru POS Market (field-validated 2026-03-21)
+
+- **<5% of POS in Peru have inventory or catalog data** — they just track money
+- Clover is not present in Peru
+- Izipay and Culqi (largest POS providers in Peru) confirmed this gap
+- Both expressed interest but said "we're not ready" — they want inventory management first
+- Nudge requires inventory data to function, making current product unviable for Peru POS market
+- This validates Clover's infrastructure (InventoryConnector, catalog) as a competitive moat
+
 ## Key Insight for Pitch
 
 Fiserv's Value-Added Services (VAS) are used by ~26% of Clover merchants and growing 27% YoY. Positioning our app as a VAS tool directly addresses their stated growth strategy. The judges will want to see something they can put in front of their merchants.

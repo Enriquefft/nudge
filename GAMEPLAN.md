@@ -29,13 +29,16 @@ Show it working. Item added → suggestion appears → staff adds it → ticket 
 "AI upsells on 78% of interactions vs 45% for humans. Average ticket increases 15-30%. For a merchant doing 100 transactions a day, that's $500+ in extra revenue — every day. The app pays for itself in the first hour."
 
 **Traction (30 sec):**
-"We talked to [N] merchants during this hackathon. Here's what they said:" → show quotes or clips. "Zero of them had any tool like this. All of them wanted it."
+"I went to 10 stores with the app. 7 want to pilot. One supermarket agreed to a 1-week pilot — targeting 10% cross-sell lift. I met with Izipay and Culqi, the two biggest POS in Peru. And as of today, Nudge is approved on the Clover App Market."
+
+**Market insight (15 sec):**
+"Here's what I found: less than 5% of POS in Peru even have inventory data. They just see money. Most POS can't do what Nudge does. Clover can — because of InventoryConnector, because of the catalog. That's the moat."
 
 **Business model (15 sec):**
-"$49/month. At 1% of Clover's 700,000 merchants, that's $2.9M ARR. Ready to ship on the Clover App Market today."
+"$29-49/month. 10% revenue lift pays for the subscription in the first day. Every upsell runs through Clover's payment rails — more GMV for Fiserv."
 
 **Close (15 sec):**
-"Merchants are leaving money on the table every transaction. Nudge fixes that. One tap at a time."
+"The app works. Stores want it. It's approved. I just need to ship it."
 
 ## Demo Video (mandatory submission)
 
